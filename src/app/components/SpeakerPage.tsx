@@ -1,0 +1,158 @@
+import { useState, useRef, useEffect } from "react";
+import Header from "./Header";
+import type { NavPage } from "../types/navigation";
+import type { SpeakerId } from "./StoryPage";
+
+const BLUE      = "#78C2C4";
+const BG        = "#07070d";
+const FG        = "#ededf0";
+const FG_MUTED  = "rgba(237,237,240,0.42)";
+const BORDER    = "rgba(255,255,255,0.07)";
+const FONT_TC   = "var(--font-qijic)";
+const FONT_NOTO = "'Noto Sans', 'Helvetica Neue', Arial, sans-serif";
+const FONT_MONO = "'DM Mono','Courier New',monospace";
+
+const THEME_GROUPS = [
+  {
+    themeId: 1, index: "01", title: "山海之間的生活節奏", tag: "地方要聞",
+    speakers: [
+      { speakerId: "1-0" as SpeakerId, name: "范春源", honorific: "教授", institution: "國立台東大學體育學系", topic: "運動發展", portrait: "https://nwdpe.nttu.edu.tw/var/file/34/1034/img/374097944.jpg" },
+      { speakerId: "1-1" as SpeakerId, name: "孟祥瀚", honorific: "退休教授", institution: "國立中興大學歷史學系", topic: "交通發展", portrait: "https://ws.th.gov.tw/002/TH/new_site/upload/show/2a757d4d76238f0d6b0006c42b2e116e.jpg" },
+    ],
+  },
+  {
+    themeId: 2, index: "02", title: "地方藝文與文化人", tag: "文化藝術",
+    speakers: [
+      { speakerId: "2-0" as SpeakerId, name: "徐千惠", honorific: "老師", institution: "國立台東高中退休教師", topic: "台東兒童文學發展", portrait: "https://scontent.ftpe8-4.fna.fbcdn.net/v/t39.30808-6/651170369_26603754445922869_2724252160407163222_n.jpg?stp=dst-jpg_tt6&cstp=mx1357x2048&ctp=s1357x2048&_nc_cat=104&ccb=1-7&_nc_sid=cf85f3&_nc_ohc=blYpYy5KFVUQ7kNvwHEZOFZ&_nc_oc=Adr4-5IirUd8wDZj5OhrZT_QbgNvkRW62Pd2VZTUWxHHIJ4Jwn-eiZMMNy5R5_Lokx2uMjQWEYnJahRmeqwS28qT&_nc_zt=23&_nc_ht=scontent.ftpe8-4.fna&_nc_gid=k_HTYuPNbJswa4hNn1IuyQ&_nc_ss=7b2a8&oh=00_Af8fk7bxT5XDChyu2fIubwezdtTZXdU7jmrVCOY-3gQryQ&oe=6A3630EC" }
+    ],
+  },
+  {
+    themeId: 3, index: "03", title: "地方特色產業發展", tag: "產業史",
+    speakers: [
+      { speakerId: "3-0" as SpeakerId, name: "許秀孟", honorific: "教授", institution: "國立台東大學文化資源與休閒產業學系", topic: "魚苗與香茅", portrait: "https://nrchisp.nttu.edu.tw/var/file/63/1063/img/674163412.jpg" },
+    ],
+  },
+  {
+    themeId: 4, index: "04", title: "祖先文化與土地", tag: "民俗信仰",
+    speakers: [
+      { speakerId: "4-0" as SpeakerId, name: "劉烱錫", honorific: "主任", institution: "國立台東大學友善環境農漁產業發展中心", topic: "原住民族部落永續發展", portrait: "https://ils.nttu.edu.tw/var/file/20/1020/img/423586424.jpg" }, 
+    ],
+  },
+];
+
+interface Props {
+  defaultThemeId?:  number;
+  onNavigate:       (page: NavPage, themeId?: number) => void;
+  onSelectSpeaker:  (speakerId: SpeakerId) => void;
+}
+
+export function SpeakerPage({ defaultThemeId, onNavigate, onSelectSpeaker }: Props) {
+  const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+  const themeRefs = useRef<Record<number, HTMLDivElement | null>>({});
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (defaultThemeId == null) return;
+    const el = themeRefs.current[defaultThemeId];
+    if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
+  }, [defaultThemeId]);
+
+  return (
+    <div style={{ fontFamily: FONT_NOTO, background: BG, color: FG, minHeight: "100vh", position: "relative" }}>
+      <style>{`
+        @font-face { font-family: 'QIJIC'; src: url('./fonts/qiji-combo.ttf') format('truetype'); font-weight: normal; font-style: normal; font-display: swap; }
+        .qijic-font-render { font-family: 'QIJIC', ${FONT_TC} !important; }
+      `}</style>
+
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <Header current="speaker" onNavigate={onNavigate} />
+
+        {/* ── 🎯 HERO AREA: 補回滿版大氣背景插圖 ── */}
+        <div style={{ paddingTop: isMobile ? 90 : 60, borderBottom: `1px solid ${BORDER}`, position: "relative", overflow: "hidden" }}>
+          {/* 圖片背景層 */}
+          <div style={{
+            position: "absolute", inset: 0,
+            backgroundImage: "url(https://photo.settour.com.tw/900x600/https://www.settour.com.tw/ss_img/info/location/TXG/G0/TXG0000263/TXG0000263_98955.jpg)",
+            backgroundSize: "cover", backgroundPosition: "center 30%",
+            opacity: 0.15, filter: "grayscale(60%)", zIndex: 0
+          }} />
+          {/* 暗色漸層遮罩 */}
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(7,7,13,0.4), rgba(7,7,13,0.9))", zIndex: 1 }} />
+
+          {/* 文字內容 */}
+          <div style={{ padding: isMobile ? "36px 20px 32px" : "52px 40px 44px", position: "relative", zIndex: 2 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+              <div style={{ width: 2, height: 18, background: BLUE }} />
+              <span style={{
+                fontFamily: FONT_MONO, fontSize: "0.8rem",
+                letterSpacing: "0.15em", color: FG_MUTED, textTransform: "uppercase",
+              }}>
+                Contributor Column
+              </span>
+            </div>
+            <h1 className="qijic-font-render" style={{ fontWeight: 400, fontSize: isMobile ? "2rem" : "3rem", color: FG, margin: 0 }}>講者專欄</h1>
+            <p style={{ fontSize: "1.02rem", color: FG_MUTED, marginTop: 8, maxWidth: 600 }}>
+              本特展邀請深耕台東的學者與教育工作者，分享他們對更生日報歷史文獻的研究記憶。
+            </p>
+          </div>
+        </div>
+
+        {/* LIST */}
+        <div style={{ padding: isMobile ? "0 20px 60px" : "0 40px 80px" }}>
+          {THEME_GROUPS.map((group, gi) => (
+            <div key={group.themeId} ref={(el) => { themeRefs.current[group.themeId] = el; }} style={{ paddingTop: 40, borderBottom: gi < THEME_GROUPS.length - 1 ? `1px solid ${BORDER}` : "none", paddingBottom: 40, position: "relative" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+                <span style={{ fontFamily: FONT_MONO, fontSize: "0.8rem", color: BLUE }}>THEME {group.index}</span>
+                <span style={{ fontFamily: FONT_MONO, fontSize: "0.8rem", color: FG_MUTED }}>{group.tag}</span>
+              </div>
+              <h2 style={{ fontSize: "1.3rem", fontWeight: 900, color: FG, margin: "0 0 24px" }}>{group.title}</h2>
+
+              <div style={{ display: "grid", gridTemplateColumns: isMobile || group.speakers.length === 1 ? "1fr" : "1fr 1fr", gap: 16 }}>
+                {group.speakers.map((sp, si) => {
+                  const key = `${group.themeId}-${si}`;
+                  const isH = hoveredKey === key;
+                  return (
+                    <button
+                      key={si} onClick={() => onSelectSpeaker(sp.speakerId)}
+                      onMouseEnter={() => setHoveredKey(key)} onMouseLeave={() => setHoveredKey(null)}
+                      style={{ 
+                        display: "flex", 
+                        flexDirection: "row", 
+                        background: isH ? "rgba(120,194,196,0.06)" : "rgba(255,255,255,0.02)", 
+                        border: `1px solid ${isH ? BLUE : BORDER}`, 
+                        cursor: "pointer", 
+                        padding: "24px 28px", 
+                        textAlign: "left", 
+                        outline: "none", 
+                        overflow: "hidden", 
+                        borderRadius: 8, 
+                        width: "100%", 
+                        gap: 20 
+                      }}
+                    >
+                      <img src={sp.portrait} alt={sp.name} style={{ width: isMobile ? 76 : 96, height: isMobile ? 76 : 96, borderRadius: "50%", objectFit: "cover" }} />
+                      <div style={{ flex: 1 }}>
+                        <span style={{ fontSize: "0.82rem", color: BLUE, display: "block", marginBottom: 4 }}>{sp.topic}</span>
+                        <p style={{ fontWeight: 900, fontSize: "1.2rem", color: FG, margin: 0 }}>
+                          {sp.name} <span style={{ fontWeight: 400, fontSize: "0.9rem", color: FG_MUTED }}>{sp.honorific}</span>
+                        </p>
+                        <p style={{ fontSize: "0.92rem", color: FG_MUTED, margin: "6px 0 0" }}>{sp.institution}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

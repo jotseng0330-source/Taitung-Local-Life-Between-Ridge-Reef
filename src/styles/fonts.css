@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&family=Noto+Sans+TC:wght@300;400;500;700;900&family=DM+Mono:ital,wght@0,300;0,400;0,500&display=swap');
+
+@font-face {
+    font-family: 'QIJIC';
+    src: url('../fonts/qiji-combo.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --font-qijic: 'QIJIC', "Source Han Sans TC", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+}
+
+.qijic-title {
+    font-family: var(--font-qijic) !important;
+    font-weight: normal !important;
+}
+
+h1 {
+    font-family: 'QIJIC', "Source Han Sans TC", sans-serif;
+}

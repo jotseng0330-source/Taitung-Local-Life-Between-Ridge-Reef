@@ -60,7 +60,7 @@ export function ArchiveCalendar({ targetYear, targetMonth, targetDay }: ArchiveC
           fontFamily: FONT_MONO, fontSize: "0.82rem",
           color: ACCENT, margin: "4px 0 0", textTransform: "uppercase",
         }}>
-          ● 系統自動抓取日期
+          ● 系統將自動抓取日期
         </p>
       </div>
 

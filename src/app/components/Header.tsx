@@ -31,33 +31,30 @@ export default function Header({ current, onNavigate }: Props) {
 
   return (
     <header style={{
-  position: "sticky",       /* 🛠️ 改用 sticky！這會讓它在到達最上方時自動「黏住」 */
-  top: 0,                  /* 🛠️ 告訴瀏覽器：只要一貼到最頂端（0的位置）就立刻鎖死 */
-  
-  /* 鎖定寬度，不讓 sticky 變形 */
-  width: "100%",           
-  boxSizing: "border-box",  
-  
-  zIndex: 9999,            /* 🛠️ 層級一樣開到最大，確保不被任何下方元件遮擋 */
-
-  /* 底下為維持你原本的排版與間距設定 */
-  height: isMobile ? "auto" : 60, 
-  background: "rgba(7,7,13,0.96)",
-  backdropFilter: "blur(20px)",
-  borderBottom: `1px solid ${BORDER}`,
-  display: "flex", 
-  flexDirection: isMobile ? "column" : "row",
-  alignItems: "center",
-  padding: isMobile ? "20px 16px 14px" : "0 40px 0 20px",
-  justifyContent: "space-between",
-  gap: isMobile ? 16 : 0
-}}>
+      position: "sticky",       
+      top: 0,                  
+      width: "100%",           
+      boxSizing: "border-box",  
+      zIndex: 9999,            
+      height: isMobile ? "auto" : 60, 
+      background: "rgba(7,7,13,0.96)",
+      backdropFilter: "blur(20px)",
+      borderBottom: `1px solid ${BORDER}`,
+      display: "flex", 
+      flexDirection: isMobile ? "column" : "row",
+      alignItems: "center",
+      padding: isMobile ? "20px 24px 14px" : "0 40px 0 20px", // 🎯 手機版左右留白稍微拉大，讓最左最右的按鈕有呼吸空間
+      justifyContent: "space-between",
+      gap: isMobile ? 16 : 40 
+    }}>
 
       <button
         onClick={() => onNavigate("landing")}
         style={{
           background: "none", border: "none", cursor: "pointer", padding: 0,
           display: "flex", alignItems: "center", gap: 12,
+          flexShrink: 0,
+          alignSelf: isMobile ? "flex-start" : "center" // 🎯 手機版時主標題 Logo 靠左對齊
         }}
       >
         <span className="qijic-font-render" style={{
@@ -68,15 +65,29 @@ export default function Header({ current, onNavigate }: Props) {
 
         <div style={{ width: isMobile ? 4 : 8, height: isMobile ? 20 : 36, background: "#ededf0", opacity: 0.85 }} />
 
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center",alignItems: "flex-start",                /* 🛠️ 確保 flex 子元素（span）從最左邊開始排 */
-  textAlign: "left", fontFamily: "'Josefin Sans', sans-serif", fontSize: isMobile ? "0.5rem" : "0.65rem", color: "#ffffff", fontWeight: 700, textTransform: "uppercase" }}>
+        <div style={{ 
+          display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start",                
+          textAlign: "left", fontFamily: "'Josefin Sans', sans-serif", fontSize: isMobile ? "0.5rem" : "0.65rem", color: "#ffffff", fontWeight: 700, textTransform: "uppercase" 
+        }}>
           <span>Taitung:</span>
           <span>Local Life</span>
           <span>Between Ridge and Reef</span>
         </div>
       </button>
 
-      <nav className="mobile-nav-scroll" style={{ display: "flex", gap: isMobile ? 20 : 36, alignItems: "center", justifyContent: "center" }}>
+      {/* ── 🎯 這次手機版也徹底改好了！ ── */}
+      <nav 
+        className="mobile-nav-scroll" 
+        style={{ 
+          display: "flex", 
+          flex: 1, // 🎯 不管電腦還是手機，通通撐滿剩餘空間
+          width: "100%", // 🎯 確保手機版時能吃滿 100% 寬度
+          maxWidth: isMobile ? "100%" : "500px", 
+          gap: 0, // 🎯 拔掉固定 gap，交給 space-between 自動均分
+          alignItems: "center", 
+          justifyContent: "space-between" // 🎯 手機與電腦同步達成：最左、置中、最右完美對齊！
+        }}
+      >
         {navItems.map(({ label, page }) => {
           const active = current === page;
           return (

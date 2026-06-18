@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ArchiveCalendar } from "./ArchiveCalendar";
 import { REPORTS_BY_SPEAKER } from "./CalendarPage"; 
 import Header from "./Header";
+import ScrollHint from "./ScrollHint";
 import type { NavPage } from "../types/navigation";
 
 const FONT_TC   = "var(--font-qijic)";
@@ -131,21 +132,22 @@ export function StoryPage({ speakerId, onBack, onNavigate }: Props) {
       `}</style>
 
       <div style={{ position: "relative", zIndex: 1 }}>
+        <ScrollHint label="往下滑看報導與影像" />
         <Header current="speaker" onNavigate={onNavigate} />
 
         {/* TITLE */}
-        <div style={{ paddingTop: isMobile ? 90 : 60, borderBottom: `1px solid ${BORDER}` }}>
+        <div style={{ paddingTop: isMobile ? 30 : 40, borderBottom: `1px solid ${BORDER}` }}>
           <div style={{ padding: "24px 40px" }}>
-            <span style={{ fontFamily: FONT_MONO, fontSize: "0.8rem", color: BLUE, textTransform: "uppercase" }}>
+            <span style={{ fontFamily: FONT_MONO, fontSize: "0.9rem", color: BLUE, textTransform: "uppercase" }}>
               THEME {sp.themeIndex} · {sp.themeTitle} · {sp.topic}
             </span>
-            <h1 className="qijic-font-render" style={{ fontWeight: 400, fontSize: isMobile ? "1.5rem" : "2.4rem", margin: "6px 0 0", letterSpacing: "0.04em" }}>
-              {sp.name} {sp.honorific} ── {sp.essayTitle}
+            <h1 className="qijic-font-render" style={{ fontWeight: 400, fontSize: isMobile ? "1.5rem" : "2.4rem", margin: "6px 0 0", letterSpacing: "0.04em", lineHeight: 1.35 }}>
+              {sp.essayTitle}
             </h1>
           </div>
         </div>
 
-        {/* 雙欄主架構（還原右側大插圖面板與縮圖功能） */}
+        {/* 雙欄主架構 */}
         <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", minHeight: "70vh" }}>
           
           {/* 行動端頂部插圖 */}
@@ -174,8 +176,8 @@ export function StoryPage({ speakerId, onBack, onNavigate }: Props) {
               <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
                 <img src={sp.portrait} alt={sp.name} style={{ width: 60, height: 60, borderRadius: "50%", objectFit: "cover", border: `1px solid ${BORDER}` }} />
                 <div>
-                  <p style={{ margin: 0, fontSize: "1.25rem", color: FG }}>
-                    <span className="qijic-font-render" style={{ fontWeight: 400, marginRight: 6 }}>{sp.name}</span>
+                  <p style={{ margin: 0, color: FG, display: "flex", alignItems: "baseline" }}>
+                    <span className="qijic-font-render" style={{ fontWeight: 400, marginRight: 8, fontSize: "1.6rem" }}>{sp.name}</span>
                     <span style={{ fontFamily: FONT_NOTO, fontSize: "0.95rem", color: FG_MUTED }}>{sp.honorific}</span>
                   </p>
                   <p style={{ margin: 0, fontSize: "0.9rem", color: FG_MUTED, fontFamily: FONT_NOTO }}>{sp.institution}</p>
@@ -210,13 +212,36 @@ export function StoryPage({ speakerId, onBack, onNavigate }: Props) {
           )}
         </div>
 
+        {/* 自動調閱系統區塊 */}
         <div style={{ borderTop: `2px solid ${BORDER}`, background: "rgba(255,255,255,0.01)" }}>
-          <div style={{ padding: "24px 40px", borderBottom: `1px solid ${BORDER}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ 
+            padding: "24px 40px", 
+            borderBottom: `1px solid ${BORDER}`, 
+            display: "flex", 
+            flexDirection: isMobile ? "column" : "row", 
+            justifyContent: "space-between", 
+            alignItems: isMobile ? "flex-start" : "center",
+            gap: isMobile ? 16 : 0
+          }}>
             <div>
-              <h2 className="qijic-font-render" style={{ fontWeight: 400, fontSize: "1.2rem", color: FG, margin: 0, letterSpacing: "0.05em" }}>更生日報 時空自動調閱系統</h2>
+              <h2 className="qijic-font-render" style={{ fontWeight: 400, fontSize: "1.6rem", color: FG, margin: 0, letterSpacing: "0.05em" }}>更生日報 時空自動調閱系統</h2>
               <p style={{ fontFamily: FONT_NOTO, fontSize: "0.85rem", color: FG_MUTED, margin: "4px 0 0" }}>日曆已自動鎖定老師推薦的歷史報導</p>
             </div>
-            <button onClick={() => onNavigate("calendar", sp.themeId)} style={{ fontFamily: FONT_NOTO, fontSize: "0.85rem", background: "transparent", border: `1px solid ${BLUE}`, color: BLUE, padding: "6px 14px", cursor: "pointer", borderRadius: 4 }}>
+            <button 
+              onClick={() => onNavigate("calendar", sp.themeId)} 
+              style={{ 
+                fontFamily: FONT_NOTO, 
+                fontSize: "0.85rem", 
+                background: "transparent", 
+                border: `1px solid ${BLUE}`, 
+                color: BLUE, 
+                padding: "10px 14px", 
+                cursor: "pointer", 
+                borderRadius: 4,
+                width: isMobile ? "100%" : "auto",
+                textAlign: "center"
+              }}
+            >
               前往完整時空調閱系統 →
             </button>
           </div>

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import Header from "./Header";
+import ScrollHint from "./ScrollHint";
 import type { NavPage } from "../types/navigation";
 import type { SpeakerId } from "./StoryPage";
 
@@ -72,16 +73,17 @@ export function SpeakerPage({ defaultThemeId, onNavigate, onSelectSpeaker }: Pro
       `}</style>
 
       <div style={{ position: "relative", zIndex: 1 }}>
+        <ScrollHint label="往下滑看講者內容" />
         <Header current="speaker" onNavigate={onNavigate} />
 
-        {/* ── 🎯 HERO AREA: 補回滿版大氣背景插圖 ── */}
+        {/* ── 滿版背景插圖 ── */}
         <div style={{ paddingTop: isMobile ? 90 : 60, borderBottom: `1px solid ${BORDER}`, position: "relative", overflow: "hidden" }}>
           {/* 圖片背景層 */}
           <div style={{
             position: "absolute", inset: 0,
-            backgroundImage: "url(https://photo.settour.com.tw/900x600/https://www.settour.com.tw/ss_img/info/location/TXG/G0/TXG0000263/TXG0000263_98955.jpg)",
-            backgroundSize: "cover", backgroundPosition: "center 30%",
-            opacity: 0.15, filter: "grayscale(60%)", zIndex: 0
+            backgroundImage: "url(https://images.unsplash.com/photo-1611023705027-7a387cc062de?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
+            backgroundSize: "cover", backgroundPosition: "center 70%",
+            opacity: 0.5, filter: "grayscale(60%)", zIndex: 0
           }} />
           {/* 暗色漸層遮罩 */}
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(7,7,13,0.4), rgba(7,7,13,0.9))", zIndex: 1 }} />

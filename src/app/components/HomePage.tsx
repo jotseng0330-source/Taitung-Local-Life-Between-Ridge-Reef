@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import Header from "./Header";
+import ScrollHint from "./ScrollHint";
 import type { NavPage } from "../types/navigation";
 
 const logoKengSheng = new URL("./logo-kengsheng.png", import.meta.url).href;
@@ -124,6 +125,8 @@ export function HomePage({ onCardClick, onNavigate }: Props) {
       </div>
 
       <div style={{ position: "relative", zIndex: 1 }}>
+
+      <ScrollHint label="往下滑看主題單元" />
 
       <Header current="landing" onNavigate={onNavigate} />
 

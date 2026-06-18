@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { ArchiveCalendar } from "./ArchiveCalendar";
 import Header from "./Header";
+import ScrollHint from "./ScrollHint";
 import type { NavPage } from "../types/navigation";
 
 const BLUE      = "#78C2C4";
@@ -74,6 +75,8 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
   const [isMobile, setIsMobile] = useState(false);
 
   const calendarSectionRef = useRef<HTMLDivElement | null>(null);
+  // 🎯 新增一個專門鎖定子標題導覽列的錨點 Ref
+  const subSubNavRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -95,15 +98,23 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
   const currentReports = activeSpeakerId ? (REPORTS_BY_SPEAKER[activeSpeakerId] ?? []) : [];
   const currentReport = currentReports[reportIndex];
 
-  // 🎯 修正後的卡片點擊函式：依據講者數量決定是否立即下滑
+  // 🎯 智慧型點擊引導函式優化
   function pickTheme(id: number) {
     setSelectedTheme(id);
     
     const availableSpeakers = SPEAKERS_BY_THEME[id] || [];
     if (availableSpeakers.length <= 1) {
+      // 1. 如果是單一講者主題 (Theme 02, 03, 04)，直接一路平滑滑動到最底下的文獻日曆中心
       setTimeout(() => {
         if (calendarSectionRef.current) {
           calendarSectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 150);
+    } else {
+      // 2. 💡 重點優化：如果是擁有多個子單元的主題 (Theme 01)，自動下滑至剛露出的「單元分項按鈕列」，引導點選
+      setTimeout(() => {
+        if (subSubNavRef.current) {
+          subSubNavRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       }, 150);
     }
@@ -117,16 +128,17 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
       `}</style>
 
       <div style={{ position: "relative", zIndex: 1 }}>
+        <ScrollHint label="往下滑看調閱內容" />
         <Header current="calendar" onNavigate={onNavigate} />
 
-        {/* ── 🎯 TITLE: 補回大氣插圖背景 ── */}
+        {/* ── 插圖背景 ── */}
         <div style={{ paddingTop: isMobile ? 90 : 60, borderBottom: `1px solid ${BORDER}`, position: "relative", overflow: "hidden" }}>
           {/* 圖片背景 */}
           <div style={{
             position: "absolute", inset: 0,
-            backgroundImage: "url(https://images.unsplash.com/photo-1568093706416-302fa653623c?w=1920&h=1080&fit=crop&auto=format)",
-            backgroundSize: "cover", backgroundPosition: "center 40%",
-            opacity: 0.15, filter: "grayscale(60%)", zIndex: 0
+            backgroundImage: "url(https://images.unsplash.com/photo-1694005892433-7c810c1e54ae?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
+            backgroundSize: "cover", backgroundPosition: "center 50%",
+            opacity: 0.5, filter: "grayscale(60%)", zIndex: 0
           }} />
           {/* 暗色遮罩 */}
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(7,7,13,0.4), rgba(7,7,13,0.9))", zIndex: 1 }} />
@@ -183,9 +195,9 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
             })}
           </div>
 
-          {/* 🎯 修改後的按鈕列：純粹乾淨標示子題標題名稱，點選後才下滑 */}
+          {/* 🎯 綁定子單元按鈕列錨點 Ref，點選第一大題後自動滾動到此區塊中心 */}
           {selectedTheme && (SPEAKERS_BY_THEME[selectedTheme] || []).length > 1 && (
-            <div style={{ marginTop: 20, padding: "12px", background: "rgba(255,255,255,0.02)", border: `1px solid ${BORDER}`, display: "flex", gap: 10, alignItems: "center" }}>
+            <div ref={subSubNavRef} style={{ marginTop: 20, padding: "12px", background: "rgba(255,255,255,0.02)", border: `1px solid ${BORDER}`, display: "flex", gap: 10, alignItems: "center", scrollMargin: "20px" }}>
               <span style={{ fontSize: "0.85rem", color: FG_MUTED, fontFamily: FONT_NOTO }}>請選擇單元分項：</span>
               {(SPEAKERS_BY_THEME[selectedTheme] || []).map(sp => (
                 <button
@@ -244,8 +256,14 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
           )}
         </div>
 
-        {/* FOOTER */}
-        <footer style={{ borderTop: `1px solid ${BORDER}`, padding: "30px 40px" }}><span style={{ fontFamily: FONT_MONO, fontSize: "0.85rem", color: FG_MUTED }}>© 更生日報全報影像資料庫 (Cretit: 漢珍數位圖書公司)</span></footer>
+        <footer style={{ borderTop: `1px solid ${BORDER}`, padding: "30px 40px", textAlign: "left" }}>
+          <div style={{ fontFamily: FONT_MONO, fontSize: "0.85rem", color: FG_MUTED }}>
+            © 更生日報全報影像資料庫
+          </div>
+          <div style={{ fontFamily: FONT_MONO, fontSize: "0.85rem", color: FG_MUTED, marginTop: "4px" }}>
+            (Credit: 漢珍數位圖書公司)
+          </div>
+        </footer>
       </div>
     </div>
   );

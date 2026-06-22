@@ -10,43 +10,53 @@ interface Props {
 
 export function ScrollHint({ label = "往下滑看更多內容", show = true }: Props) {
   const [isVisible, setIsVisible] = useState(false);
+  const [hasOverflow, setHasOverflow] = useState(false);
 
   useEffect(() => {
     if (!show) return;
 
     const revealTimer = window.setTimeout(() => setIsVisible(true), 650);
 
-    const hideHint = () => {
-      if (window.scrollY > Math.max(72, window.innerHeight * 0.12)) {
+    const updateVisibility = () => {
+      const scrollRoot = document.documentElement;
+      const scrollHeight = scrollRoot.scrollHeight;
+      const viewportHeight = window.innerHeight;
+      const remaining = scrollHeight - (window.scrollY + viewportHeight);
+      const overflowExists = scrollHeight > viewportHeight + 24;
+
+      setHasOverflow(overflowExists);
+      if (overflowExists && remaining < 160) {
         setIsVisible(false);
+      } else if (overflowExists) {
+        setIsVisible(true);
       }
     };
 
-    const scheduleHide = () => {
-      window.requestAnimationFrame(hideHint);
+    const scheduleUpdate = () => {
+      window.requestAnimationFrame(updateVisibility);
     };
 
-    window.addEventListener("scroll", scheduleHide, { passive: true });
-    window.addEventListener("resize", scheduleHide);
-    window.addEventListener("load", scheduleHide);
-    document.fonts?.ready.then(scheduleHide).catch(() => {
-      scheduleHide();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    window.addEventListener("load", scheduleUpdate);
+    document.fonts?.ready.then(scheduleUpdate).catch(() => {
+      scheduleUpdate();
     });
 
-    const resizeObserver = new ResizeObserver(scheduleHide);
+    const resizeObserver = new ResizeObserver(scheduleUpdate);
     resizeObserver.observe(document.documentElement);
-    scheduleHide();
+    scheduleUpdate();
 
     return () => {
       window.clearTimeout(revealTimer);
-      window.removeEventListener("scroll", scheduleHide);
-      window.removeEventListener("resize", scheduleHide);
-      window.removeEventListener("load", scheduleHide);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      window.removeEventListener("load", scheduleUpdate);
       resizeObserver.disconnect();
     };
   }, [show]);
 
-  if (!show || !isVisible) return null;
+  if (!show || !isVisible || !hasOverflow) return null;
 
   return (
     <div

@@ -10,43 +10,43 @@ interface Props {
 
 export function ScrollHint({ label = "往下滑看更多內容", show = true }: Props) {
   const [isVisible, setIsVisible] = useState(false);
-  const [hasMoreContent, setHasMoreContent] = useState(false);
 
   useEffect(() => {
     if (!show) return;
 
     const revealTimer = window.setTimeout(() => setIsVisible(true), 650);
 
-    const updateVisibility = () => {
-      const remaining = document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
-      setHasMoreContent(remaining > 120);
+    const hideHint = () => {
+      if (window.scrollY > Math.max(72, window.innerHeight * 0.12)) {
+        setIsVisible(false);
+      }
     };
 
-    const scheduleUpdate = () => {
-      window.requestAnimationFrame(updateVisibility);
+    const scheduleHide = () => {
+      window.requestAnimationFrame(hideHint);
     };
 
-    window.addEventListener("scroll", scheduleUpdate, { passive: true });
-    window.addEventListener("resize", scheduleUpdate);
-    window.addEventListener("load", scheduleUpdate);
-    document.fonts?.ready.then(scheduleUpdate).catch(() => {
-      scheduleUpdate();
+    window.addEventListener("scroll", scheduleHide, { passive: true });
+    window.addEventListener("resize", scheduleHide);
+    window.addEventListener("load", scheduleHide);
+    document.fonts?.ready.then(scheduleHide).catch(() => {
+      scheduleHide();
     });
 
-    const resizeObserver = new ResizeObserver(scheduleUpdate);
+    const resizeObserver = new ResizeObserver(scheduleHide);
     resizeObserver.observe(document.documentElement);
-    scheduleUpdate();
+    scheduleHide();
 
     return () => {
       window.clearTimeout(revealTimer);
-      window.removeEventListener("scroll", scheduleUpdate);
-      window.removeEventListener("resize", scheduleUpdate);
-      window.removeEventListener("load", scheduleUpdate);
+      window.removeEventListener("scroll", scheduleHide);
+      window.removeEventListener("resize", scheduleHide);
+      window.removeEventListener("load", scheduleHide);
       resizeObserver.disconnect();
     };
   }, [show]);
 
-  if (!show || !isVisible || !hasMoreContent) return null;
+  if (!show || !isVisible) return null;
 
   return (
     <div

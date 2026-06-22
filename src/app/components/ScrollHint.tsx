@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { ChevronDown } from "lucide-react";
 
 const BLUE = "#78C2C4";
@@ -9,13 +10,11 @@ interface Props {
 }
 
 export function ScrollHint({ label = "往下滑看更多內容", show = true }: Props) {
-  const [isVisible, setIsVisible] = useState(false);
-  const [hasOverflow, setHasOverflow] = useState(false);
+  const [hasOverflow, setHasOverflow] = useState(true);
+  const [isAtBottom, setIsAtBottom] = useState(false);
 
   useEffect(() => {
     if (!show) return;
-
-    const revealTimer = window.setTimeout(() => setIsVisible(true), 650);
 
     const updateVisibility = () => {
       const scrollRoot = document.documentElement;
@@ -25,11 +24,7 @@ export function ScrollHint({ label = "往下滑看更多內容", show = true }: 
       const overflowExists = scrollHeight > viewportHeight + 24;
 
       setHasOverflow(overflowExists);
-      if (overflowExists && remaining < 160) {
-        setIsVisible(false);
-      } else if (overflowExists) {
-        setIsVisible(true);
-      }
+      setIsAtBottom(overflowExists && remaining < 160);
     };
 
     const scheduleUpdate = () => {
@@ -48,7 +43,6 @@ export function ScrollHint({ label = "往下滑看更多內容", show = true }: 
     scheduleUpdate();
 
     return () => {
-      window.clearTimeout(revealTimer);
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("resize", scheduleUpdate);
       window.removeEventListener("load", scheduleUpdate);
@@ -56,9 +50,11 @@ export function ScrollHint({ label = "往下滑看更多內容", show = true }: 
     };
   }, [show]);
 
-  if (!show || !isVisible || !hasOverflow) return null;
+  if (!show || !hasOverflow || isAtBottom) return null;
 
-  return (
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
     <div
       aria-hidden="true"
       style={{
@@ -114,7 +110,7 @@ export function ScrollHint({ label = "往下滑看更多內容", show = true }: 
         {label}
       </span>
     </div>
-  );
+  , document.body);
 }
 
 export default ScrollHint;

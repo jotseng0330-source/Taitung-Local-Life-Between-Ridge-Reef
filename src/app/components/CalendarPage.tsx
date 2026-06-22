@@ -45,8 +45,46 @@ export const REPORTS_BY_SPEAKER: Record<string, Array<{
     { date: "1960-06-12", year: 1960, month: 6, day: 12, title: "紅葉少棒萌芽期：地方聯賽打出名號", reporter: "地方記者 林山海", summary: "本報記者深入延平鄉紅葉村，記錄學童練球日常。這群山中健兒在地方少棒聯賽中展露頭角，更生日報常年的追蹤報導，成為紅葉傳奇最珍貴的起點紀錄。", newspaperUrl: "https://www.ksnews.com.tw/" }
   ],
   "1-1": [
-    { date: "1947-10-15", year: 1947, month: 10, day: 15, title: "台東大橋開通要聞：東台灣交通新紀元", reporter: "本報特派記者 張地方", summary: "台東大橋於昨日舉行隆重通車典禮。此座橫跨卑南溪的鋼筋混凝土大橋歷時數年克服物料短缺艱難完工，通車後將徹底終結往返縱谷與市區需涉水涉溪的險象，對地方產業與民生物資調度具有里程碑式歷史意義。", newspaperUrl: "https://www.ksnews.com.tw/" },
-    { date: "2020-04-15", year: 2020, month: 4, day: 15, title: "南迴鐵路電氣化測試：台東鐵路網最後一哩路", reporter: "交通記者 鐵道迷", summary: "南迴鐵路電氣化工程進入最後測試階段。這項耗時多年的艱鉅工程克服了無數隧道與崇山峻嶺的考驗，通車後台北至台東車程將再度縮短，更生日報詳實見證了台東與外縣市空間距離的歷史性跨越。", newspaperUrl: "https://www.ksnews.com.tw/" }
+    { 
+      date: "1973-12-25", 
+      year: 1973, 
+      month: 12, 
+      day: 25, 
+      title: "北迴鐵路興建工程 今天自南北兩端開工", 
+      reporter: "更生日報記者群", 
+      summary: "北迴鐵路工程於今日正式展開南北兩端同時開工之歷史新頁。此項被列為國家重大經濟建設之首要工程，北自蘇澳、南至花蓮新站，全長達八十餘公里。主體工程由臺灣省鐵路局與榮民工程處協力承建，預計克服崇山峻嶺與無數隧道之艱難挑戰。通車後將徹底打破東部百年來受山海阻隔之交通孤島困境，對繁榮東部經濟、加速物資調度具有劃時代的戰略與民生里程碑意義。", 
+      newspaperUrl: "https://www.ksnews.com.tw/" 
+    },
+    { 
+      date: "1977-12-01", 
+      year: 1977, 
+      month: 12, 
+      day: 1, 
+      title: "東線鐵路拓寬 提前12日開工", 
+      reporter: "更生日報記者群", 
+      summary: "東部交通建設迎來重大進展！攸關地方發展至鉅的東線鐵路拓寬工程，已確定提前 12 日於今日（12月1日）正式開工。臺灣省鐵路局東線鐵路拓寬工程處亦於今日正式成立，負責統籌整體拓寬工程。本工程旨在將現行狹軌軌道全面拓寬為標準軌距，以提昇東部鐵路的運輸效能。更生日報記者群詳實記錄，本工程處的成立與提前開工，象徵東部鐵路全面現代化的開端，完工後將能有效解決東部常年運能不足、與西部鐵路系統無法接軌之難題，對促進花東地區經濟繁榮具有關鍵意義。", 
+      newspaperUrl: "https://www.ksnews.com.tw/" 
+    },
+    { 
+      date: "1980-02-01", 
+      year: 1980, 
+      month: 2, 
+      day: 1, 
+      title: "開發東部邁進新里程碑 · 北迴鐵路今舉行通車禮", 
+      reporter: "更生日報記者群", 
+      summary: "數十年宿願今日實現！北迴鐵路於今日（2月1日）舉行盛大正式通車典禮。此項被譽為『鐵路北迴 鬼斧神工』的艱鉅工程，歷經多年與崇山峻嶺之搏鬥，克服了無數隧道與地質挑戰，終於全線竣工通車。通車首日，東台灣軍民萬眾歡騰、煙火齊放。北迴鐵路的正式營運，不僅實現了台灣環島鐵路網的關鍵一環，更徹底打破東部長期因交通不便造成的產業發展限制，正式宣告東台灣交通與經濟邁入嶄新里程碑。", 
+      newspaperUrl: "https://www.ksnews.com.tw/" 
+    },
+    { 
+      date: "1980-07-01", 
+      year: 1980, 
+      month: 7, 
+      day: 1, 
+      title: "民眾展開多采多姿活動 · 熱烈慶祝南迴鐵路開工", 
+      reporter: "更生日報記者群", 
+      summary: "東部與南部交通建設迎來歷史性的一刻！南迴鐵路工程於今日（7月1日）在台東正式舉行開工典禮。此項工程西起屏東枋寮、東至台東新站，全長達九十餘公里。主體工程由臺灣省鐵路局全力打造，預計挑戰貫穿中央山脈南段、開鑿三十餘座複雜隧道的艱鉅任務。南迴鐵路的動工不僅象徵著環島鐵路系統最後一塊拼圖的全面啟動，未來完工後更將徹底終結南臺灣與東臺灣長年受地理阻隔之苦，對縮短東西部空間距離、繁榮地方經濟具有跨世代的里程碑意義。", 
+      newspaperUrl: "https://www.ksnews.com.tw/" 
+    },
   ],
   "2-0": [
     { date: "1972-04-05", year: 1972, month: 4, day: 5, title: "台東兒童文學新苗：地方學校童詩創作展成果覽", reporter: "副刊編輯 筆尖人", summary: "更生日報副刊今日以大篇幅刊登台東多所國小學童的優秀童詩作品。主編指出，地方副刊常年開闢兒童文學專欄，對啟迪東台灣學子的創作想像與紀錄純真日常，有著無可替代的催生作用。", newspaperUrl: "https://www.ksnews.com.tw/" },
@@ -75,7 +113,6 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
   const [isMobile, setIsMobile] = useState(false);
 
   const calendarSectionRef = useRef<HTMLDivElement | null>(null);
-  // 🎯 新增一個專門鎖定子標題導覽列的錨點 Ref
   const subSubNavRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -98,20 +135,17 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
   const currentReports = activeSpeakerId ? (REPORTS_BY_SPEAKER[activeSpeakerId] ?? []) : [];
   const currentReport = currentReports[reportIndex];
 
-  // 🎯 智慧型點擊引導函式優化
   function pickTheme(id: number) {
     setSelectedTheme(id);
     
     const availableSpeakers = SPEAKERS_BY_THEME[id] || [];
     if (availableSpeakers.length <= 1) {
-      // 1. 如果是單一講者主題 (Theme 02, 03, 04)，直接一路平滑滑動到最底下的文獻日曆中心
       setTimeout(() => {
         if (calendarSectionRef.current) {
           calendarSectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
         }
       }, 150);
     } else {
-      // 2. 💡 重點優化：如果是擁有多個子單元的主題 (Theme 01)，自動下滑至剛露出的「單元分項按鈕列」，引導點選
       setTimeout(() => {
         if (subSubNavRef.current) {
           subSubNavRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -133,14 +167,12 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
 
         {/* ── 插圖背景 ── */}
         <div style={{ paddingTop: isMobile ? 90 : 60, borderBottom: `1px solid ${BORDER}`, position: "relative", overflow: "hidden" }}>
-          {/* 圖片背景 */}
           <div style={{
             position: "absolute", inset: 0,
             backgroundImage: "url(https://images.unsplash.com/photo-1694005892433-7c810c1e54ae?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
             backgroundSize: "cover", backgroundPosition: "center 50%",
             opacity: 0.5, filter: "grayscale(60%)", zIndex: 0
           }} />
-          {/* 暗色遮罩 */}
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(7,7,13,0.4), rgba(7,7,13,0.9))", zIndex: 1 }} />
 
           <div style={{ padding: isMobile ? "32px 20px 24px" : "44px 40px 36px", position: "relative", zIndex: 2 }}>
@@ -195,7 +227,6 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
             })}
           </div>
 
-          {/* 🎯 綁定子單元按鈕列錨點 Ref，點選第一大題後自動滾動到此區塊中心 */}
           {selectedTheme && (SPEAKERS_BY_THEME[selectedTheme] || []).length > 1 && (
             <div ref={subSubNavRef} style={{ marginTop: 20, padding: "12px", background: "rgba(255,255,255,0.02)", border: `1px solid ${BORDER}`, display: "flex", gap: 10, alignItems: "center", scrollMargin: "20px" }}>
               <span style={{ fontSize: "0.85rem", color: FG_MUTED, fontFamily: FONT_NOTO }}>請選擇單元分項：</span>

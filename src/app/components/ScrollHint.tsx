@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
 import { ChevronDown } from "lucide-react";
 
 const BLUE = "#78C2C4";
@@ -49,7 +48,7 @@ export function ScrollHint({ label = "往下滑看更多內容", show = true }: 
 
   if (!show || !isVisible || !hasMoreContent) return null;
 
-  return createPortal(
+  return (
     <div
       aria-hidden="true"
       style={{
@@ -93,10 +92,10 @@ export function ScrollHint({ label = "往下滑看更多內容", show = true }: 
       </div>
       <span
         style={{
+          color: "rgba(237,237,240,0.75)",
           fontFamily: "'DM Mono','Courier New',monospace",
           fontSize: "0.75rem",
           letterSpacing: "0.14em",
-          color: "rgba(237,237,240,0.75)",
           textTransform: "uppercase",
           textAlign: "center",
           whiteSpace: "nowrap",
@@ -105,7 +104,6 @@ export function ScrollHint({ label = "往下滑看更多內容", show = true }: 
         {label}
       </span>
     </div>
-    , document.body
   );
 }
 

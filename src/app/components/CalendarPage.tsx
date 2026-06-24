@@ -363,8 +363,8 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
                     <div style={{ display: "flex", justifyContent: "space-between", borderBottom: `1px solid ${BORDER}`, paddingBottom: 14, marginBottom: 20 }}><span style={{ fontFamily: FONT_MONO, color: BLUE, fontSize: "1.05rem" }}>報導日期：{currentReport.date}</span></div>
                     <h3 style={{ fontFamily: FONT_NOTO, fontSize: "1.7rem", fontWeight: 700, color: FG, margin: "0 0 12px 0", lineHeight: 1.4 }}>{currentReport.title}</h3>
                     <div style={{ fontSize: "0.92rem", color: BLUE, marginBottom: 20, fontFamily: FONT_NOTO }}>本報記者：{currentReport.reporter}</div>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "flex-start" }}>
-                      <div style={{ flex: "1 1 320px", minWidth: 0, borderTop: `1px solid ${BORDER}`, paddingTop: 16, fontSize: "1.05rem", color: "rgba(237,237,240,0.8)", lineHeight: 1.7, fontFamily: FONT_NOTO }}><span style={{ display: "block", color: FG_MUTED, fontSize: "0.95rem", marginBottom: 6, fontWeight: 700 }}>報導摘要大綱</span>{currentReport.summary}</div>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "stretch" }}>
+                      <div style={{ flex: "1 1 min(50%, 360px)", minWidth: 0, borderTop: `1px solid ${BORDER}`, paddingTop: 16, fontSize: "1.0rem", color: "rgba(237,237,240,0.8)", lineHeight: 1.7, fontFamily: FONT_NOTO, whiteSpace: "normal", wordBreak: "break-word" }}><span style={{ display: "block", color: FG_MUTED, fontSize: "0.95rem", marginBottom: 6, fontWeight: 700 }}>報導摘要大綱</span>{currentReport.summary}</div>
                       <button
                         onClick={async () => {
                           const imageCandidates = resolvedImageCandidates.length > 0
@@ -375,8 +375,9 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
                           window.open(`/newspaper-preview.html?src=${encodeURIComponent(firstImage)}&images=${imagesParam}&page=calendar&themeId=${selectedTheme ?? ""}&speakerId=${activeSpeakerId}&reportDate=${encodeURIComponent(currentReport.date)}`, "_blank", "noopener,noreferrer");
                         }}
                         style={{
-                          flex: "0 0 min(320px, 100%)",
-                          width: isMobile ? "100%" : 320,
+                          flex: "1 1 min(50%, 360px)",
+                          minWidth: 0,
+                          width: isMobile ? "100%" : "100%",
                           padding: 0,
                           border: `1px solid ${BORDER}`,
                           background: "rgba(255,255,255,0.03)",

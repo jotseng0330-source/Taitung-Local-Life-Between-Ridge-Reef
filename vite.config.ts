@@ -22,7 +22,7 @@ export default defineConfig({
   ],
   server: {
     host: '0.0.0.0',
-    port: 8080, // 🎯 把這裡的 5173 改成 8080！
+    port: 5173, 
     strictPort: true,
     allowedHosts: true,
     hmr: {

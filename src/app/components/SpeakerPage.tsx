@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from "react";
+import { ArchiveCalendar } from "./ArchiveCalendar";
 import Header from "./Header";
 import ScrollHint from "./ScrollHint";
 import type { NavPage } from "../types/navigation";
 import type { SpeakerId } from "./StoryPage";
+import { REPORTS_BY_SPEAKER, getReportImagePaths } from "./CalendarPage";
 
 const BLUE      = "#78C2C4";
 const BG        = "#07070d";
@@ -17,7 +19,6 @@ const THEME_GROUPS = [
   {
     themeId: 1, index: "01", title: "山海之間的生活節奏", tag: "地方要聞",
     speakers: [
-      { speakerId: "1-0" as SpeakerId, name: "范春源", honorific: "教授", institution: "國立台東大學體育學系", topic: "運動發展", portrait: "https://nwdpe.nttu.edu.tw/var/file/34/1034/img/374097944.jpg" },
       { speakerId: "1-1" as SpeakerId, name: "孟祥瀚", honorific: "退休教授", institution: "國立中興大學歷史學系", topic: "交通發展", portrait: "https://ws.th.gov.tw/002/TH/new_site/upload/show/2a757d4d76238f0d6b0006c42b2e116e.jpg" },
     ],
   },
@@ -41,6 +42,15 @@ const THEME_GROUPS = [
   },
 ];
 
+const AVAILABLE_SPEAKERS = THEME_GROUPS.flatMap((group) =>
+  group.speakers.map((speaker) => ({
+    ...speaker,
+    themeTitle: group.title,
+    themeIndex: group.index,
+    themeTag: group.tag,
+  }))
+);
+
 interface Props {
   defaultThemeId?:  number;
   onNavigate:       (page: NavPage, themeId?: number) => void;
@@ -49,6 +59,8 @@ interface Props {
 
 export function SpeakerPage({ defaultThemeId, onNavigate, onSelectSpeaker }: Props) {
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+  const [activeSpeakerId, setActiveSpeakerId] = useState<SpeakerId>("1-1");
+  const [reportIndex, setReportIndex] = useState(0);
   const themeRefs = useRef<Record<number, HTMLDivElement | null>>({});
   const [isMobile, setIsMobile] = useState(false);
 
@@ -64,6 +76,15 @@ export function SpeakerPage({ defaultThemeId, onNavigate, onSelectSpeaker }: Pro
     const el = themeRefs.current[defaultThemeId];
     if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
   }, [defaultThemeId]);
+
+  useEffect(() => {
+    setReportIndex(0);
+  }, [activeSpeakerId]);
+
+  const currentSpeaker = AVAILABLE_SPEAKERS.find((speaker) => speaker.speakerId === activeSpeakerId) ?? AVAILABLE_SPEAKERS[0];
+  const currentReports = REPORTS_BY_SPEAKER[activeSpeakerId] ?? [];
+  const currentReport = currentReports[reportIndex];
+  const { previewImage, fullImage } = currentReport ? getReportImagePaths(currentSpeaker?.name ?? "", currentReport.date) : { previewImage: "/news/placeholder-newspaper.svg", fullImage: "/news/placeholder-newspaper.svg" };
 
   return (
     <div style={{ fontFamily: FONT_NOTO, background: BG, color: FG, minHeight: "100vh", position: "relative" }}>
@@ -153,6 +174,85 @@ export function SpeakerPage({ defaultThemeId, onNavigate, onSelectSpeaker }: Pro
               </div>
             </div>
           ))}
+
+          <div style={{ borderTop: `1px solid ${BORDER}`, marginTop: 36, paddingTop: 32 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+              <div style={{ width: 24, height: 24, borderRadius: "50%", background: BLUE, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ fontFamily: FONT_MONO, fontSize: "0.82rem", fontWeight: 700, color: BG }}>3</span>
+              </div>
+              <h2 style={{ fontFamily: FONT_NOTO, fontWeight: 700, fontSize: "0.95rem", color: FG, margin: 0 }}>文獻時空調閱中心</h2>
+            </div>
+
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 16 }}>
+              {AVAILABLE_SPEAKERS.map((speaker) => (
+                <button
+                  key={speaker.speakerId}
+                  onClick={() => {
+                    setActiveSpeakerId(speaker.speakerId);
+                    setReportIndex(0);
+                  }}
+                  style={{
+                    padding: "8px 12px",
+                    borderRadius: 999,
+                    border: activeSpeakerId === speaker.speakerId ? `1px solid ${BLUE}` : `1px solid ${BORDER}`,
+                    background: activeSpeakerId === speaker.speakerId ? "rgba(120,194,196,0.12)" : "rgba(255,255,255,0.03)",
+                    color: FG,
+                    cursor: "pointer",
+                    fontFamily: FONT_NOTO,
+                    fontSize: "0.9rem"
+                  }}
+                >
+                  {speaker.name}
+                </button>
+              ))}
+            </div>
+
+            {currentReport && currentSpeaker && (
+              <div style={{ border: `1px solid ${BORDER}`, borderRadius: 14, background: "rgba(255,255,255,0.03)", padding: 24 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, borderBottom: `1px solid ${BORDER}`, paddingBottom: 12, marginBottom: 18 }}>
+                  <div>
+                    <div style={{ fontFamily: FONT_MONO, color: BLUE, fontSize: "0.85rem", marginBottom: 4 }}>{currentSpeaker.themeIndex} · {currentSpeaker.themeTitle}</div>
+                    <div style={{ fontFamily: FONT_NOTO, fontSize: "1.15rem", fontWeight: 700, color: FG }}>{currentReport.title}</div>
+                  </div>
+                  <div style={{ fontFamily: FONT_MONO, color: FG_MUTED, fontSize: "0.82rem", whiteSpace: "nowrap" }}>日期 {currentReport.date}</div>
+                </div>
+
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "flex-start" }}>
+                  <div style={{ flex: "1 1 320px", minWidth: 0 }}>
+                    <div style={{ fontSize: "0.92rem", color: BLUE, marginBottom: 12, fontFamily: FONT_NOTO }}>本報記者：{currentReport.reporter}</div>
+                    <div style={{ fontSize: "1.02rem", color: "rgba(237,237,240,0.82)", lineHeight: 1.8, fontFamily: FONT_NOTO, borderTop: `1px solid ${BORDER}`, paddingTop: 14 }}>{currentReport.summary}</div>
+                  </div>
+
+                  <div style={{ flex: "0 0 min(320px, 100%)", width: isMobile ? "100%" : 320 }}>
+                    <div style={{ marginBottom: 12 }}>
+                      <ArchiveCalendar targetYear={currentReport.year} targetMonth={currentReport.month} targetDay={currentReport.day} />
+                    </div>
+                    <button
+                      onClick={() => window.open(`/newspaper-preview.html?src=${encodeURIComponent(fullImage)}`, "_blank", "noopener,noreferrer")}
+                      style={{
+                        width: "100%",
+                        padding: 0,
+                        border: `1px solid ${BORDER}`,
+                        background: "rgba(255,255,255,0.03)",
+                        borderRadius: 12,
+                        overflow: "hidden",
+                        cursor: "pointer",
+                        textAlign: "left",
+                        color: FG,
+                        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)"
+                      }}
+                    >
+                      <img src={previewImage} alt={`報紙預覽：${currentReport.title}`} style={{ width: "100%", height: 180, objectFit: "cover", display: "block" }} />
+                      <div style={{ padding: "10px 12px", fontFamily: FONT_NOTO, fontSize: "0.92rem", color: FG, borderTop: `1px solid ${BORDER}` }}>
+                        <div style={{ fontWeight: 700, color: BLUE, marginBottom: 4 }}>開啟報紙預覽</div>
+                        <div style={{ color: FG_MUTED, fontSize: "0.84rem" }}>點擊可查看完整報紙圖片內容</div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

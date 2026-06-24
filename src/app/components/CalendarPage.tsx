@@ -22,7 +22,6 @@ const THEMES = [
 
 const SPEAKERS_BY_THEME: Record<number, Array<{ id: string; name: string; subTopic: string }>> = {
   1: [
-    { id: "1-0", name: "范春源 教授", subTopic: "運動發展" },
     { id: "1-1", name: "孟祥瀚 退休教授", subTopic: "交通發展" }
   ],
   2: [
@@ -39,11 +38,8 @@ const SPEAKERS_BY_THEME: Record<number, Array<{ id: string; name: string; subTop
 export const REPORTS_BY_SPEAKER: Record<string, Array<{
   date: string; year: number; month: number; day: number;
   title: string; reporter: string; summary: string; newspaperUrl: string;
+  previewImage?: string; fullImage?: string;
 }>> = {
-  "1-0": [
-    { date: "1947-07-15", year: 1947, month: 7, day: 15, title: "台東全縣全運會盛大開幕：展現戰後地方朝氣", reporter: "本報特派記者 張地方", summary: "更生日報創刊首月即詳細報導了台東全縣運動會之盛況。全縣各鄉鎮健兒共聚一堂，展現了極具地方凝聚力的歷史一頁。", newspaperUrl: "https://www.ksnews.com.tw/" },
-    { date: "1960-06-12", year: 1960, month: 6, day: 12, title: "紅葉少棒萌芽期：地方聯賽打出名號", reporter: "地方記者 林山海", summary: "本報記者深入延平鄉紅葉村，記錄學童練球日常。這群山中健兒在地方少棒聯賽中展露頭角，更生日報常年的追蹤報導，成為紅葉傳奇最珍貴的起點紀錄。", newspaperUrl: "https://www.ksnews.com.tw/" }
-  ],
   "1-1": [
     { 
       date: "1973-12-25", 
@@ -100,6 +96,42 @@ export const REPORTS_BY_SPEAKER: Record<string, Array<{
   ]
 };
 
+function buildReportImageCandidates(speakerName: string, reportDate: string) {
+  const folderName = (speakerName || "").split(/\s+/).filter(Boolean)[0] || "";
+  const dateKey = reportDate.replace(/-/g, "");
+  const folderSegment = folderName ? encodeURIComponent(folderName) : "";
+  const patterns = [
+    `${dateKey}`,
+    `${dateKey} A`,
+    `${dateKey} B`,
+    `${dateKey} C`,
+    `${dateKey}Ａ`,
+    `${dateKey}Ｂ`,
+    `${dateKey}Ｃ`,
+  ];
+
+  const extensions = ["jpg", "jpeg", "png", "webp", "avif", "svg"];
+  const candidates: string[] = [];
+
+  patterns.forEach((pattern) => {
+    extensions.forEach((ext) => {
+      const encodedPattern = encodeURIComponent(pattern);
+      candidates.push(`/news/${folderSegment}/${encodedPattern}.${ext}`);
+    });
+  });
+
+  return candidates;
+}
+
+export function getReportImagePaths(speakerName: string, reportDate: string) {
+  const candidates = buildReportImageCandidates(speakerName, reportDate);
+  const fallback = "/news/placeholder-newspaper.svg";
+  return {
+    previewImage: candidates[0] ?? fallback,
+    fullImage: candidates[0] ?? fallback,
+  };
+}
+
 interface Props {
   defaultThemeId?: number;
   onNavigate: (page: NavPage, themeId?: number) => void;
@@ -134,6 +166,8 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
 
   const currentReports = activeSpeakerId ? (REPORTS_BY_SPEAKER[activeSpeakerId] ?? []) : [];
   const currentReport = currentReports[reportIndex];
+  const currentSpeakerName = (SPEAKERS_BY_THEME[Number(selectedTheme)] || []).find((speaker) => speaker.id === activeSpeakerId)?.name ?? "";
+  const { previewImage, fullImage } = currentReport ? getReportImagePaths(currentSpeakerName, currentReport.date) : { previewImage: "/news/placeholder-newspaper.svg", fullImage: "/news/placeholder-newspaper.svg" };
 
   function pickTheme(id: number) {
     setSelectedTheme(id);
@@ -278,7 +312,31 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
                     <div style={{ display: "flex", justifyContent: "space-between", borderBottom: `1px solid ${BORDER}`, paddingBottom: 14, marginBottom: 20 }}><span style={{ fontFamily: FONT_MONO, color: BLUE, fontSize: "1.05rem" }}>報導日期：{currentReport.date}</span></div>
                     <h3 style={{ fontFamily: FONT_NOTO, fontSize: "1.7rem", fontWeight: 700, color: FG, margin: "0 0 12px 0", lineHeight: 1.4 }}>{currentReport.title}</h3>
                     <div style={{ fontSize: "0.92rem", color: BLUE, marginBottom: 20, fontFamily: FONT_NOTO }}>本報記者：{currentReport.reporter}</div>
-                    <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: 16, fontSize: "1.05rem", color: "rgba(237,237,240,0.8)", lineHeight: 1.7, fontFamily: FONT_NOTO }}><span style={{ display: "block", color: FG_MUTED, fontSize: "0.95rem", marginBottom: 6, fontWeight: 700 }}>報導摘要大綱</span>{currentReport.summary}</div>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "flex-start" }}>
+                      <div style={{ flex: "1 1 320px", minWidth: 0, borderTop: `1px solid ${BORDER}`, paddingTop: 16, fontSize: "1.05rem", color: "rgba(237,237,240,0.8)", lineHeight: 1.7, fontFamily: FONT_NOTO }}><span style={{ display: "block", color: FG_MUTED, fontSize: "0.95rem", marginBottom: 6, fontWeight: 700 }}>報導摘要大綱</span>{currentReport.summary}</div>
+                      <button
+                        onClick={() => window.open(`/newspaper-preview.html?src=${encodeURIComponent(fullImage)}`, "_blank", "noopener,noreferrer")}
+                        style={{
+                          flex: "0 0 min(320px, 100%)",
+                          width: isMobile ? "100%" : 320,
+                          padding: 0,
+                          border: `1px solid ${BORDER}`,
+                          background: "rgba(255,255,255,0.03)",
+                          borderRadius: 12,
+                          overflow: "hidden",
+                          cursor: "pointer",
+                          textAlign: "left",
+                          color: FG,
+                          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)"
+                        }}
+                      >
+                        <img src={previewImage} alt={`報紙預覽：${currentReport.title}`} style={{ width: "100%", height: 180, objectFit: "cover", display: "block" }} />
+                        <div style={{ padding: "10px 12px", fontFamily: FONT_NOTO, fontSize: "0.92rem", color: FG, borderTop: `1px solid ${BORDER}` }}>
+                          <div style={{ fontWeight: 700, color: BLUE, marginBottom: 4 }}>開啟報紙預覽</div>
+                          <div style={{ color: FG_MUTED, fontSize: "0.84rem" }}>點擊可查看完整報紙圖片內容</div>
+                        </div>
+                      </button>
+                    </div>
                   </div>
                   <div style={{ marginTop: 32 }}><a href={currentReport.newspaperUrl} target="_blank" rel="noopener noreferrer"><button style={{ width: "100%", padding: "14px", borderRadius: 10, background: "transparent", border: `2px solid ${BLUE}`, color: BLUE, fontFamily: FONT_NOTO, fontSize: "1.05rem", cursor: "pointer", fontWeight: 600 }}>點擊跨時空瀏覽《更生日報》真實報紙原貌</button></a></div>
                 </div>

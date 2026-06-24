@@ -14,24 +14,12 @@ const FG        = "#ededf0";
 const FG_MUTED  = "rgba(237,237,240,0.42)";
 const BORDER    = "rgba(255,255,255,0.07)";
 
-export type SpeakerId = "1-0" | "1-1" | "2-0" | "3-0" | "4-0"; 
+export type SpeakerId = "1-1" | "2-0" | "3-0" | "4-0"; 
 
 const SPEAKER_DATA: Record<SpeakerId, {
   name: string; honorific: string; institution: string; topic: string; portrait: string;
   tags: string[]; essayTitle: string; essayParas: string[]; themeId: number; themeIndex: string; themeTitle: string; themeTag: string; bgImage: string;
 }> = {
-  "1-0": {
-    name: "范春源", honorific: "教授", institution: "國立台東大學體育學系", topic: "運動發展",
-    portrait: "https://nwdpe.nttu.edu.tw/var/file/34/1034/img/374097944.jpg",
-    tags: ["台東體育史", "運動社群", "更生日報體育版"],
-    essayTitle: "從更生日報體育版讀見台東運動史",
-    essayParas: [
-      "更生日報創刊於民國三十六年（1947 年），是台灣東部歷史最悠久的地方報紙。七十餘年來，這份報紙靜靜記錄著台東縣的晴雨悲喜，見著了山海之間無數個普通人的日常生活——農事的節氣、漁獲的豐歉、廟會的鑼鼓與學校的運動會——這些被大歷史遺忘的細節，卻是地方社會最真實的體溫記錄。",
-      "台東的體育文化，在更生日報的版面中佔有相當份量。從早期的學校運動會、部落傳統競技，到後來各鄉鎮的棒球聯賽，每一場比賽的勝負、每一位選手的名字，都被這份報紙忠實記錄下來。那些鉛字排版的消息，今天讀起來不作者成績紀錄，更是地方社群凝聚的見證。"
-    ],
-    themeId: 1, themeIndex: "01", themeTitle: "山海之間的生活節奏", themeTag: "地方要聞",
-    bgImage: "https://images.unsplash.com/photo-1694005891521-150e805eebf1?w=1920&h=1080&fit=crop&auto=format"
-  },
   "1-1": {
     name: "孟祥瀚", honorific: "退休教授", institution: "國立中興大學歷史學系", topic: "交通發展",
     portrait: "https://ws.th.gov.tw/002/TH/new_site/upload/show/2a757d4d76238f0d6b0006c42b2e116e.jpg",

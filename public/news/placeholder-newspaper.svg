@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#0f1118"/>
+  <rect x="72" y="72" width="1056" height="656" rx="20" fill="#171924" stroke="#78c2c4" stroke-width="4"/>
+  <rect x="128" y="132" width="340" height="24" rx="12" fill="#78c2c4" fill-opacity="0.85"/>
+  <rect x="128" y="182" width="220" height="16" rx="8" fill="#ededf0" fill-opacity="0.7"/>
+  <rect x="128" y="236" width="920" height="18" rx="9" fill="#ededf0" fill-opacity="0.4"/>
+  <rect x="128" y="272" width="860" height="18" rx="9" fill="#ededf0" fill-opacity="0.3"/>
+  <rect x="128" y="308" width="740" height="18" rx="9" fill="#ededf0" fill-opacity="0.25"/>
+  <rect x="128" y="380" width="320" height="220" rx="16" fill="#23273a" stroke="#2b3042" stroke-width="2"/>
+  <rect x="480" y="380" width="560" height="220" rx="16" fill="#23273a" stroke="#2b3042" stroke-width="2"/>
+  <rect x="520" y="430" width="220" height="16" rx="8" fill="#78c2c4" fill-opacity="0.8"/>
+  <rect x="520" y="468" width="420" height="14" rx="7" fill="#ededf0" fill-opacity="0.4"/>
+  <rect x="520" y="498" width="360" height="14" rx="7" fill="#ededf0" fill-opacity="0.28"/>
+  <rect x="520" y="528" width="300" height="14" rx="7" fill="#ededf0" fill-opacity="0.2"/>
+  <text x="128" y="660" fill="#78c2c4" font-family="Arial, sans-serif" font-size="34" font-weight="700">報紙圖片預覽</text>
+  <text x="128" y="700" fill="#ededf0" fill-opacity="0.75" font-family="Arial, sans-serif" font-size="24">上傳正式掃描檔後，將自動替換此預覽圖</text>
+</svg>

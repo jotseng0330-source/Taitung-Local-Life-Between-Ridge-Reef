@@ -93,12 +93,25 @@ const SPEAKER_DATA: Record<SpeakerId, {
   }
 };
 
-const toStoryMediaPath = (fileName: string) => `/story-media/${encodeURIComponent(fileName)}`;
+const toStoryMediaPath = (folderName: string, fileName: string) => `/story-media/${encodeURIComponent(folderName)}/${encodeURIComponent(fileName)}`;
 
 const MEDIA_BY_THEME: Record<number, { src: string; thumb: string; caption: string }[]> = {
   1: [
-    { src: "https://images.unsplash.com/photo-1694005891521-150e805eebf1?w=1200&h=800&fit=crop&auto=format", thumb: "https://images.unsplash.com/photo-1694005891521-150e805eebf1?w=200&h=140&fit=crop&auto=format", caption: "台東市郊道路旁的老樹，約 1950 年代。原版掃描自台東縣文化局典藏。" },
-    { src: "https://images.unsplash.com/photo-1610859250485-31443500f8c6?w=1200&h=800&fit=crop&auto=format", thumb: "https://images.unsplash.com/photo-1610859250485-31443500f8c6?w=200&h=140&fit=crop&auto=format", caption: "池上鄉稻田與水岸，豐收季節農民作業景況，約 1960 年代。" },
+   {
+      src: toStoryMediaPath("孟祥瀚", "台東舊火車站（今台東轉運站）.jpg"),
+      thumb: toStoryMediaPath("孟祥瀚", "台東舊火車站（今台東轉運站）.jpg"),
+      caption: "台東舊火車站（今台東轉運站）"
+    },
+    {
+      src: toStoryMediaPath("孟祥瀚", "民國71年南下最後的光華號列車人員在玉里站合影留念.jpg"),
+      thumb: toStoryMediaPath("孟祥瀚", "民國71年南下最後的光華號列車人員在玉里站合影留念.jpg"),
+      caption: "民國71年南下最後的光華號列車人員在玉里站合影留念"
+    },
+    {
+      src: toStoryMediaPath("孟祥瀚", "花東線火車路牌拋接.jpg"),
+      thumb: toStoryMediaPath("孟祥瀚", "花東線火車路牌拋接.jpg"),
+      caption: "花東線火車路牌拋接"
+    }
   ],
   2: [
     { src: "https://images.unsplash.com/photo-1601482919158-1af01b70a427?w=1200&h=800&fit=crop&auto=format", thumb: "https://images.unsplash.com/photo-1601482919158-1af01b70a427?w=200&h=140&fit=crop&auto=format", caption: "台東在地藝文展覽與文藝聚會現場，約 1970 年代。" },
@@ -108,18 +121,18 @@ const MEDIA_BY_THEME: Record<number, { src: string; thumb: string; caption: stri
   ],
   4: [
     {
-      src: toStoryMediaPath("2015.4.1 利稻長老教會卡法司牧師帶領長榮大學布農族團契為高山湖泊取名Cinanuma buan (月亮的鏡子).jpg"),
-      thumb: toStoryMediaPath("2015.4.1 利稻長老教會卡法司牧師帶領長榮大學布農族團契為高山湖泊取名Cinanuma buan (月亮的鏡子).jpg"),
+      src: toStoryMediaPath("劉烱錫", "2015.4.1 利稻長老教會卡法司牧師帶領長榮大學布農族團契為高山湖泊取名Cinanuma buan (月亮的鏡子).jpg"),
+      thumb: toStoryMediaPath("劉烱錫", "2015.4.1 利稻長老教會卡法司牧師帶領長榮大學布農族團契為高山湖泊取名Cinanuma buan (月亮的鏡子).jpg"),
       caption: "利稻長老教會卡法司牧師帶領長榮大學布農族團契為高山湖泊取名Cinanuma buan (月亮的鏡子)"
     },
     {
-      src: toStoryMediaPath("在台東縣金峰鄉嘉蘭村重建的霧台鄉好茶部落魯凱族石板家屋.jpg"),
-      thumb: toStoryMediaPath("在台東縣金峰鄉嘉蘭村重建的霧台鄉好茶部落魯凱族石板家屋.jpg"),
+      src: toStoryMediaPath("劉烱錫", "在台東縣金峰鄉嘉蘭村重建的霧台鄉好茶部落魯凱族石板家屋.jpg"),
+      thumb: toStoryMediaPath("劉烱錫", "在台東縣金峰鄉嘉蘭村重建的霧台鄉好茶部落魯凱族石板家屋.jpg"),
       caption: "在台東縣金峰鄉嘉蘭村重建的霧台鄉好茶部落魯凱族石板家屋"
     },
     {
-      src: toStoryMediaPath("阿美族竹筏帆船.jpg"),
-      thumb: toStoryMediaPath("阿美族竹筏帆船.jpg"),
+      src: toStoryMediaPath("劉烱錫", "阿美族竹筏帆船.jpg"),
+      thumb: toStoryMediaPath("劉烱錫", "阿美族竹筏帆船.jpg"),
       caption: "阿美族竹筏帆船"
     }
   ],

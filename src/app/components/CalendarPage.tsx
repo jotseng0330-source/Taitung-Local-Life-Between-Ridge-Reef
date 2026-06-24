@@ -100,15 +100,16 @@ export function buildReportImageCandidates(speakerName: string, reportDate: stri
   const folderName = (speakerName || "").split(/\s+/).filter(Boolean)[0] || "";
   const dateKey = reportDate.replace(/-/g, "");
   const folderSegment = folderName ? encodeURIComponent(folderName) : "";
-  const patterns = [
-    `${dateKey}`,
-    `${dateKey} A`,
-    `${dateKey} B`,
-    `${dateKey} C`,
-    `${dateKey}Ａ`,
-    `${dateKey}Ｂ`,
-    `${dateKey}Ｃ`,
-  ];
+  const patterns = [`${dateKey}`];
+  const asciiLetters = Array.from({ length: 26 }, (_, index) => String.fromCharCode(65 + index));
+  const fullWidthLetters = Array.from({ length: 26 }, (_, index) => String.fromCharCode(65313 + index));
+
+  [...asciiLetters, ...fullWidthLetters].forEach((letter) => {
+    patterns.push(`${dateKey} ${letter}`);
+    patterns.push(`${dateKey}${letter}`);
+    patterns.push(`${dateKey}-${letter}`);
+    patterns.push(`${dateKey}_${letter}`);
+  });
 
   const extensions = ["jpg", "jpeg", "png", "webp", "avif", "svg"];
   const candidates: string[] = [];

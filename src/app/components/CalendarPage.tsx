@@ -96,7 +96,7 @@ export const REPORTS_BY_SPEAKER: Record<string, Array<{
   ]
 };
 
-function buildReportImageCandidates(speakerName: string, reportDate: string) {
+export function buildReportImageCandidates(speakerName: string, reportDate: string) {
   const folderName = (speakerName || "").split(/\s+/).filter(Boolean)[0] || "";
   const dateKey = reportDate.replace(/-/g, "");
   const folderSegment = folderName ? encodeURIComponent(folderName) : "";
@@ -130,6 +130,28 @@ export function getReportImagePaths(speakerName: string, reportDate: string) {
     previewImage: candidates[0] ?? fallback,
     fullImage: candidates[0] ?? fallback,
   };
+}
+
+export async function resolveReportImageCandidates(speakerName: string, reportDate: string) {
+  const candidates = buildReportImageCandidates(speakerName, reportDate);
+  const fallback = "/news/placeholder-newspaper.svg";
+  const resolvedCandidates: string[] = [];
+
+  for (const candidate of candidates) {
+    const exists = await new Promise<boolean>((resolve) => {
+      const image = new Image();
+      image.onload = () => resolve(true);
+      image.onerror = () => resolve(false);
+      image.src = candidate;
+    });
+
+    if (exists) {
+      resolvedCandidates.push(candidate);
+      if (resolvedCandidates.length >= 12) break;
+    }
+  }
+
+  return resolvedCandidates.length > 0 ? resolvedCandidates : [fallback];
 }
 
 interface Props {
@@ -167,7 +189,36 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
   const currentReports = activeSpeakerId ? (REPORTS_BY_SPEAKER[activeSpeakerId] ?? []) : [];
   const currentReport = currentReports[reportIndex];
   const currentSpeakerName = (SPEAKERS_BY_THEME[Number(selectedTheme)] || []).find((speaker) => speaker.id === activeSpeakerId)?.name ?? "";
-  const { previewImage, fullImage } = currentReport ? getReportImagePaths(currentSpeakerName, currentReport.date) : { previewImage: "/news/placeholder-newspaper.svg", fullImage: "/news/placeholder-newspaper.svg" };
+  const [resolvedPreviewImage, setResolvedPreviewImage] = useState("/news/placeholder-newspaper.svg");
+  const [resolvedFullImage, setResolvedFullImage] = useState("/news/placeholder-newspaper.svg");
+  const [resolvedImageCandidates, setResolvedImageCandidates] = useState<string[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    if (!currentReport) {
+      setResolvedPreviewImage("/news/placeholder-newspaper.svg");
+      setResolvedFullImage("/news/placeholder-newspaper.svg");
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    const loadCandidates = async () => {
+      const candidates = await resolveReportImageCandidates(currentSpeakerName, currentReport.date);
+      if (!cancelled) {
+        setResolvedImageCandidates(candidates);
+        setResolvedPreviewImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
+        setResolvedFullImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
+      }
+    };
+
+    loadCandidates();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [currentReport, currentSpeakerName]);
 
   function pickTheme(id: number) {
     setSelectedTheme(id);
@@ -315,7 +366,14 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "flex-start" }}>
                       <div style={{ flex: "1 1 320px", minWidth: 0, borderTop: `1px solid ${BORDER}`, paddingTop: 16, fontSize: "1.05rem", color: "rgba(237,237,240,0.8)", lineHeight: 1.7, fontFamily: FONT_NOTO }}><span style={{ display: "block", color: FG_MUTED, fontSize: "0.95rem", marginBottom: 6, fontWeight: 700 }}>報導摘要大綱</span>{currentReport.summary}</div>
                       <button
-                        onClick={() => window.open(`/newspaper-preview.html?src=${encodeURIComponent(fullImage)}`, "_blank", "noopener,noreferrer")}
+                        onClick={async () => {
+                          const imageCandidates = resolvedImageCandidates.length > 0
+                            ? resolvedImageCandidates
+                            : await resolveReportImageCandidates(currentSpeakerName, currentReport.date);
+                          const firstImage = imageCandidates[0] ?? "/news/placeholder-newspaper.svg";
+                          const imagesParam = encodeURIComponent(JSON.stringify(imageCandidates));
+                          window.open(`/newspaper-preview.html?src=${encodeURIComponent(firstImage)}&images=${imagesParam}&page=calendar&themeId=${selectedTheme ?? ""}&speakerId=${activeSpeakerId}&reportDate=${encodeURIComponent(currentReport.date)}`, "_blank", "noopener,noreferrer");
+                        }}
                         style={{
                           flex: "0 0 min(320px, 100%)",
                           width: isMobile ? "100%" : 320,
@@ -330,7 +388,7 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
                           boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)"
                         }}
                       >
-                        <img src={previewImage} alt={`報紙預覽：${currentReport.title}`} style={{ width: "100%", height: 180, objectFit: "cover", display: "block" }} />
+                        <img src={resolvedPreviewImage} alt={`報紙預覽：${currentReport.title}`} style={{ width: "100%", height: 180, objectFit: "cover", display: "block" }} />
                         <div style={{ padding: "10px 12px", fontFamily: FONT_NOTO, fontSize: "0.92rem", color: FG, borderTop: `1px solid ${BORDER}` }}>
                           <div style={{ fontWeight: 700, color: BLUE, marginBottom: 4 }}>開啟報紙預覽</div>
                           <div style={{ color: FG_MUTED, fontSize: "0.84rem" }}>點擊可查看完整報紙圖片內容</div>
@@ -338,7 +396,6 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
                       </button>
                     </div>
                   </div>
-                  <div style={{ marginTop: 32 }}><a href={currentReport.newspaperUrl} target="_blank" rel="noopener noreferrer"><button style={{ width: "100%", padding: "14px", borderRadius: 10, background: "transparent", border: `2px solid ${BLUE}`, color: BLUE, fontFamily: FONT_NOTO, fontSize: "1.05rem", cursor: "pointer", fontWeight: 600 }}>點擊跨時空瀏覽《更生日報》真實報紙原貌</button></a></div>
                 </div>
               </div>
             </div>

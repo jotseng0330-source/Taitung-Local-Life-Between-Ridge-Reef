@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HomePage }    from "./components/HomePage";
 import { CalendarPage } from "./components/CalendarPage";
 import { SpeakerPage }  from "./components/SpeakerPage";
@@ -33,6 +33,28 @@ export default function App() {
       setTimeout(() => setIsTransitioning(false), 20);
     }, TRANS_MS);
   }
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      const payload = event.data;
+      if (!payload || payload.type !== "return-to-app") return;
+
+      const page = payload.page as NavPage | undefined;
+      const themeId = payload.themeId ? Number(payload.themeId) : undefined;
+      if (page === "calendar") {
+        setScreen({ type: "calendar", themeId });
+      } else if (page === "speaker") {
+        setScreen({ type: "speaker", scrollToTheme: themeId });
+      } else if (page === "speakerProfile") {
+        setScreen({ type: "speakerProfile", speakerId: payload.speakerId as SpeakerId });
+      } else {
+        setScreen({ type: "landing" });
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
 
   let content = null;
   if (screen.type === "calendar") {

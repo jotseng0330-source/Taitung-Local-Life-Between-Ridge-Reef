@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ArchiveCalendar } from "./ArchiveCalendar";
-import { REPORTS_BY_SPEAKER, getReportImagePaths } from "./CalendarPage"; 
+import { REPORTS_BY_SPEAKER, resolveReportImageCandidates } from "./CalendarPage"; 
 import Header from "./Header";
 import ScrollHint from "./ScrollHint";
 import type { NavPage } from "../types/navigation";
@@ -109,8 +109,10 @@ export function StoryPage({ speakerId, onBack, onNavigate }: Props) {
   
   const speakerReports = REPORTS_BY_SPEAKER[speakerId] ?? [];
   const currentReport = speakerReports[localReportIndex];
-  const media = MEDIA_BY_THEME[sp.themeId] ?? []; 
-  const { previewImage, fullImage } = currentReport ? getReportImagePaths(sp.name, currentReport.date) : { previewImage: "/news/placeholder-newspaper.svg", fullImage: "/news/placeholder-newspaper.svg" };
+  const media = MEDIA_BY_THEME[sp.themeId] ?? [];
+  const [resolvedPreviewImage, setResolvedPreviewImage] = useState("/news/placeholder-newspaper.svg");
+  const [resolvedFullImage, setResolvedFullImage] = useState("/news/placeholder-newspaper.svg");
+  const [resolvedImageCandidates, setResolvedImageCandidates] = useState<string[]>([]);
 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -125,6 +127,33 @@ export function StoryPage({ speakerId, onBack, onNavigate }: Props) {
     setLocalReportIndex(0);
     setActiveImg(0);
   }, [speakerId]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    if (!currentReport) {
+      setResolvedPreviewImage("/news/placeholder-newspaper.svg");
+      setResolvedFullImage("/news/placeholder-newspaper.svg");
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    const loadCandidates = async () => {
+      const candidates = await resolveReportImageCandidates(sp.name, currentReport.date);
+      if (!cancelled) {
+        setResolvedImageCandidates(candidates);
+        setResolvedPreviewImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
+        setResolvedFullImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
+      }
+    };
+
+    loadCandidates();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [currentReport, sp.name]);
 
   return (
     <div style={{ fontFamily: FONT_NOTO, background: BG, color: FG, minHeight: "100vh", position: "relative" }}>
@@ -268,7 +297,14 @@ export function StoryPage({ speakerId, onBack, onNavigate }: Props) {
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "flex-start" }}>
                     <div style={{ flex: "1 1 320px", minWidth: 0, borderTop: `1px solid ${BORDER}`, paddingTop: 16, fontSize: "1.05rem", color: "rgba(237,237,240,0.8)", lineHeight: 1.7, fontFamily: FONT_NOTO }}><span style={{ display: "block", color: FG_MUTED, fontSize: "0.95rem", marginBottom: 6, fontWeight: 700 }}>報導摘要大綱</span>{currentReport.summary}</div>
                     <button
-                      onClick={() => window.open(`/newspaper-preview.html?src=${encodeURIComponent(fullImage)}`, "_blank", "noopener,noreferrer")}
+                      onClick={async () => {
+                        const imageCandidates = resolvedImageCandidates.length > 0
+                          ? resolvedImageCandidates
+                          : await resolveReportImageCandidates(sp.name, currentReport.date);
+                        const firstImage = imageCandidates[0] ?? "/news/placeholder-newspaper.svg";
+                        const imagesParam = encodeURIComponent(JSON.stringify(imageCandidates));
+                        window.open(`/newspaper-preview.html?src=${encodeURIComponent(firstImage)}&images=${imagesParam}&page=speakerProfile&speakerId=${speakerId}&reportDate=${encodeURIComponent(currentReport.date)}`, "_blank", "noopener,noreferrer");
+                      }}
                       style={{
                         flex: "0 0 min(320px, 100%)",
                         width: isMobile ? "100%" : 320,
@@ -283,7 +319,7 @@ export function StoryPage({ speakerId, onBack, onNavigate }: Props) {
                         boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)"
                       }}
                     >
-                      <img src={previewImage} alt={`報紙預覽：${currentReport.title}`} style={{ width: "100%", height: 180, objectFit: "cover", display: "block" }} />
+                      <img src={resolvedPreviewImage} alt={`報紙預覽：${currentReport.title}`} style={{ width: "100%", height: 180, objectFit: "cover", display: "block" }} />
                       <div style={{ padding: "10px 12px", fontFamily: FONT_NOTO, fontSize: "0.92rem", color: FG, borderTop: `1px solid ${BORDER}` }}>
                         <div style={{ fontWeight: 700, color: BLUE, marginBottom: 4 }}>開啟報紙預覽</div>
                         <div style={{ color: FG_MUTED, fontSize: "0.84rem" }}>點擊可查看完整報紙圖片內容</div>
@@ -291,7 +327,6 @@ export function StoryPage({ speakerId, onBack, onNavigate }: Props) {
                     </button>
                   </div>
                 </div>
-                <div style={{ marginTop: 32 }}><a href={currentReport.newspaperUrl} target="_blank" rel="noopener noreferrer"><button style={{ width: "100%", padding: "14px", borderRadius: 10, background: "transparent", border: `2px solid ${BLUE}`, color: BLUE, fontFamily: FONT_NOTO, fontSize: "1.05rem", cursor: "pointer", fontWeight: 600 }}>點擊跨時空瀏覽《更生日報》真實歷史報紙原貌</button></a></div>
               </div>
             </div>
           ) : (

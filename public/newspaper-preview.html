@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>報紙預覽</title>
+    <title>更生日報歷史報導：報紙預覽</title>
     <style>
       :root {
         color-scheme: dark;
@@ -64,11 +64,60 @@
         overflow: hidden;
         border: 1px solid rgba(255,255,255,0.08);
       }
+      .image-shell {
+        position: relative;
+        min-height: 360px;
+        background: linear-gradient(135deg, rgba(120, 194, 196, 0.16), rgba(255,255,255,0.04));
+      }
       img {
         display: block;
         width: 100%;
         height: auto;
         object-fit: contain;
+        opacity: 0;
+        transition: opacity 220ms ease;
+      }
+      img.is-ready {
+        opacity: 1;
+      }
+      .loading-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(7, 7, 13, 0.68);
+        backdrop-filter: blur(10px);
+        z-index: 1;
+      }
+      .loading-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 18px 24px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.12);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+      }
+      .loading-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 999px;
+        border: 3px solid rgba(120, 194, 196, 0.28);
+        border-top-color: #78c2c4;
+        animation: spin 0.9s linear infinite;
+      }
+      .loading-text {
+        font-size: 0.98rem;
+        color: #f2f4f8;
+        font-weight: 600;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }
       .hint {
         margin-top: 12px;
@@ -85,12 +134,23 @@
       </div>
       <div class="nav-row" id="nav-hint"></div>
       <div class="image-wrap">
-        <img id="preview-image" src="" alt="報紙完整圖片" />
+        <div class="image-shell">
+          <img id="preview-image" src="" alt="報紙完整圖片" />
+          <div id="loading-overlay" class="loading-overlay">
+            <div class="loading-card">
+              <div class="loading-icon"></div>
+              <div class="loading-text">圖像載入中</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="hint" class="hint">正在載入報紙圖像…</div>
 
     <script>
       const params = new URLSearchParams(window.location.search);
       const src = params.get("src");
       const img = document.getElementById("preview-image");
+      const loadingOverlay = document.getElementById("loading-overlay");
       const hint = document.getElementById("hint");
       const navHint = document.getElementById("nav-hint");
       const backButton = document.getElementById("back-button");
@@ -112,10 +172,28 @@
         imageList = [src];
       }
 
+      const showLoadingState = () => {
+        if (loadingOverlay) {
+          loadingOverlay.style.display = "flex";
+        }
+        if (hint) {
+          hint.textContent = "圖像載入中";
+        }
+        img.classList.remove("is-ready");
+      };
+
+      const hideLoadingState = () => {
+        if (loadingOverlay) {
+          loadingOverlay.style.display = "none";
+        }
+        img.classList.add("is-ready");
+      };
+
       let currentIndex = 0;
       const setImage = (index) => {
         currentIndex = Math.max(0, Math.min(index, imageList.length - 1));
         const imageSrc = imageList[currentIndex] || fallbackSrc;
+        showLoadingState();
         img.src = imageSrc;
         img.alt = imageSrc === fallbackSrc ? "報紙圖片暫時無法顯示，已顯示預設占位圖" : "報紙完整圖片";
         const totalCount = imageList.length > 1 ? imageList.length : 1;
@@ -141,6 +219,13 @@
         setImage(currentIndex);
       };
 
+      img.addEventListener("load", () => {
+        hideLoadingState();
+        if (hint) {
+          hint.textContent = imageList[currentIndex] === fallbackSrc ? "預設占位圖已顯示" : "報紙圖像載入成功";
+        }
+      });
+
       if (src) {
         applyImage(src);
       } else {
@@ -153,6 +238,20 @@
           setImage(currentIndex);
         }
       };
+
+      window.addEventListener("message", (event) => {
+        if (event.origin !== window.location.origin && event.origin !== "") {
+          return;
+        }
+        if (event.data?.type === "preview-images") {
+          const incomingImages = Array.isArray(event.data.images) ? event.data.images.filter(Boolean) : [];
+          if (incomingImages.length > 0) {
+            imageList = incomingImages;
+            currentIndex = Math.max(0, Math.min(currentIndex, imageList.length - 1));
+            setImage(currentIndex);
+          }
+        }
+      });
 
       backButton.addEventListener("click", () => {
         window.opener?.postMessage({ type: "return-to-app", page, themeId, speakerId, reportDate }, window.location.origin);

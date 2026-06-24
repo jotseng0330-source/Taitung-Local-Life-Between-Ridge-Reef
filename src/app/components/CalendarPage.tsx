@@ -100,18 +100,21 @@ export function buildReportImageCandidates(speakerName: string, reportDate: stri
   const folderName = (speakerName || "").split(/\s+/).filter(Boolean)[0] || "";
   const dateKey = reportDate.replace(/-/g, "");
   const folderSegment = folderName ? encodeURIComponent(folderName) : "";
-  const patterns = [`${dateKey}`];
-  const asciiLetters = Array.from({ length: 26 }, (_, index) => String.fromCharCode(65 + index));
-  const fullWidthLetters = Array.from({ length: 26 }, (_, index) => String.fromCharCode(65313 + index));
-
-  [...asciiLetters, ...fullWidthLetters].forEach((letter) => {
-    patterns.push(`${dateKey} ${letter}`);
-    patterns.push(`${dateKey}${letter}`);
-    patterns.push(`${dateKey}-${letter}`);
-    patterns.push(`${dateKey}_${letter}`);
-  });
-
-  const extensions = ["jpg", "jpeg", "png", "webp", "avif", "svg"];
+  const basePatterns = [
+    dateKey,
+    `${dateKey} A`, `${dateKey}A`,
+    `${dateKey} B`, `${dateKey}B`,
+    `${dateKey} C`, `${dateKey}C`,
+    `${dateKey} D`, `${dateKey}D`,
+    `${dateKey} E`, `${dateKey}E`,
+    `${dateKey} F`, `${dateKey}F`,
+    `${dateKey} G`, `${dateKey}G`,
+    `${dateKey} H`, `${dateKey}H`,
+    `${dateKey} I`, `${dateKey}I`,
+    `${dateKey} J`, `${dateKey}J`,
+  ];
+  const patterns = Array.from(new Set(basePatterns));
+  const extensions = ["jpg", "jpeg", "png", "webp"];
   const candidates: string[] = [];
 
   patterns.forEach((pattern) => {
@@ -137,18 +140,37 @@ export async function resolveReportImageCandidates(speakerName: string, reportDa
   const candidates = buildReportImageCandidates(speakerName, reportDate);
   const fallback = "/news/placeholder-newspaper.svg";
   const resolvedCandidates: string[] = [];
+  const timeoutMs = 2500;
+  const startedAt = Date.now();
 
   for (const candidate of candidates) {
+    if (Date.now() - startedAt > timeoutMs) {
+      break;
+    }
+
     const exists = await new Promise<boolean>((resolve) => {
       const image = new Image();
-      image.onload = () => resolve(true);
-      image.onerror = () => resolve(false);
+      image.decoding = "async";
+      const timer = window.setTimeout(() => {
+        image.onload = null;
+        image.onerror = null;
+        resolve(false);
+      }, timeoutMs / 2);
+
+      image.onload = () => {
+        window.clearTimeout(timer);
+        resolve(true);
+      };
+      image.onerror = () => {
+        window.clearTimeout(timer);
+        resolve(false);
+      };
       image.src = candidate;
     });
 
     if (exists) {
       resolvedCandidates.push(candidate);
-      if (resolvedCandidates.length >= 12) break;
+      if (resolvedCandidates.length >= 4) break;
     }
   }
 
@@ -193,28 +215,39 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
   const [resolvedPreviewImage, setResolvedPreviewImage] = useState("/news/placeholder-newspaper.svg");
   const [resolvedFullImage, setResolvedFullImage] = useState("/news/placeholder-newspaper.svg");
   const [resolvedImageCandidates, setResolvedImageCandidates] = useState<string[]>([]);
+  const [isPreviewImageLoading, setIsPreviewImageLoading] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
 
+    setIsPreviewImageLoading(true);
+    setResolvedImageCandidates([]);
+    setResolvedPreviewImage("/news/placeholder-newspaper.svg");
+    setResolvedFullImage("/news/placeholder-newspaper.svg");
+
     if (!currentReport) {
-      setResolvedPreviewImage("/news/placeholder-newspaper.svg");
-      setResolvedFullImage("/news/placeholder-newspaper.svg");
+      setIsPreviewImageLoading(false);
       return () => {
         cancelled = true;
       };
     }
 
     const loadCandidates = async () => {
-      const candidates = await resolveReportImageCandidates(currentSpeakerName, currentReport.date);
-      if (!cancelled) {
-        setResolvedImageCandidates(candidates);
-        setResolvedPreviewImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
-        setResolvedFullImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
+      try {
+        const candidates = await resolveReportImageCandidates(currentSpeakerName, currentReport.date);
+        if (!cancelled) {
+          setResolvedImageCandidates(candidates);
+          setResolvedPreviewImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
+          setResolvedFullImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
+        }
+      } finally {
+        if (!cancelled) {
+          setIsPreviewImageLoading(false);
+        }
       }
     };
 
-    loadCandidates();
+    void loadCandidates();
 
     return () => {
       cancelled = true;
@@ -367,13 +400,40 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "stretch" }}>
                       <div style={{ flex: "1 1 min(50%, 360px)", minWidth: 0, borderTop: `1px solid ${BORDER}`, paddingTop: 16, fontSize: "1.0rem", color: "rgba(237,237,240,0.8)", lineHeight: 1.7, fontFamily: FONT_NOTO, whiteSpace: "normal", wordBreak: "break-word" }}><span style={{ display: "block", color: FG_MUTED, fontSize: "0.95rem", marginBottom: 6, fontWeight: 700 }}>報導摘要大綱</span>{currentReport.summary}</div>
                       <button
+                        disabled={isPreviewImageLoading || !currentReport}
                         onClick={async () => {
+                          if (isPreviewImageLoading || !currentReport) {
+                            return;
+                          }
+
+                          const initialImageCandidates = resolvedImageCandidates.length > 0
+                            ? resolvedImageCandidates
+                            : [resolvedPreviewImage];
+                          const firstImage = initialImageCandidates[0] ?? "/news/placeholder-newspaper.svg";
+                          const imagesParam = encodeURIComponent(JSON.stringify(initialImageCandidates));
+                          const previewWindow = window.open(`/newspaper-preview.html?src=${encodeURIComponent(firstImage)}&images=${imagesParam}&page=calendar&themeId=${selectedTheme ?? ""}&speakerId=${activeSpeakerId}&reportDate=${encodeURIComponent(currentReport.date)}`, "_blank", "noopener,noreferrer");
+
+                          if (!previewWindow) {
+                            return;
+                          }
+
                           const imageCandidates = resolvedImageCandidates.length > 0
                             ? resolvedImageCandidates
                             : await resolveReportImageCandidates(currentSpeakerName, currentReport.date);
-                          const firstImage = imageCandidates[0] ?? "/news/placeholder-newspaper.svg";
-                          const imagesParam = encodeURIComponent(JSON.stringify(imageCandidates));
-                          window.open(`/newspaper-preview.html?src=${encodeURIComponent(firstImage)}&images=${imagesParam}&page=calendar&themeId=${selectedTheme ?? ""}&speakerId=${activeSpeakerId}&reportDate=${encodeURIComponent(currentReport.date)}`, "_blank", "noopener,noreferrer");
+
+                          setResolvedImageCandidates(imageCandidates);
+                          setResolvedPreviewImage(imageCandidates[0] ?? "/news/placeholder-newspaper.svg");
+
+                          setTimeout(() => {
+                            previewWindow.postMessage({
+                              type: "preview-images",
+                              images: imageCandidates,
+                              page: "calendar",
+                              themeId: selectedTheme ?? "",
+                              speakerId: activeSpeakerId,
+                              reportDate: currentReport.date,
+                            }, window.location.origin);
+                          }, 120);
                         }}
                         style={{
                           flex: "1 1 min(50%, 360px)",
@@ -384,16 +444,26 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
                           background: "rgba(255,255,255,0.03)",
                           borderRadius: 12,
                           overflow: "hidden",
-                          cursor: "pointer",
+                          cursor: isPreviewImageLoading ? "wait" : "pointer",
                           textAlign: "left",
                           color: FG,
-                          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)"
+                          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
+                          opacity: isPreviewImageLoading ? 0.9 : 1
                         }}
                       >
-                        <img src={resolvedPreviewImage} alt={`報紙預覽：${currentReport.title}`} style={{ width: "100%", height: 180, objectFit: "cover", display: "block" }} />
+                        <div style={{ position: "relative", width: "100%", height: 180, background: "linear-gradient(135deg, rgba(120,194,196,0.16), rgba(255,255,255,0.04))", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          {isPreviewImageLoading ? (
+                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center", padding: "0 16px" }}>
+                              <div style={{ width: 36, height: 36, borderRadius: "50%", border: `3px solid rgba(120, 194, 196, 0.24)`, borderTopColor: BLUE, animation: "spin 0.9s linear infinite" }} />
+                              <div style={{ fontFamily: FONT_NOTO, color: FG, fontWeight: 700, fontSize: "0.92rem" }}>圖像載入中</div>
+                            </div>
+                          ) : (
+                            <img src={resolvedPreviewImage} alt={`報紙預覽：${currentReport.title}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                          )}
+                        </div>
                         <div style={{ padding: "10px 12px", fontFamily: FONT_NOTO, fontSize: "0.92rem", color: FG, borderTop: `1px solid ${BORDER}` }}>
-                          <div style={{ fontWeight: 700, color: BLUE, marginBottom: 4 }}>開啟報紙預覽</div>
-                          <div style={{ color: FG_MUTED, fontSize: "0.84rem" }}>點擊可查看完整報紙圖片內容</div>
+                          <div style={{ fontWeight: 700, color: BLUE, marginBottom: 4 }}>{isPreviewImageLoading ? "資料整理中" : "開啟報紙預覽"}</div>
+                          <div style={{ color: FG_MUTED, fontSize: "0.84rem" }}>{isPreviewImageLoading ? "請稍候，系統正在載入該日期報導對應圖像" : "點擊可查看完整報紙圖片內容"}</div>
                         </div>
                       </button>
                     </div>

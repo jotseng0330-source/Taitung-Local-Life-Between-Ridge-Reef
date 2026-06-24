@@ -71,14 +71,29 @@ const SPEAKER_DATA: Record<SpeakerId, {
     name: "劉烱錫", honorific: "主任", institution: "國立台東大學友善環境農漁產業發展中心", topic: "原住民族部落永續發展", 
     portrait: "https://ils.nttu.edu.tw/var/file/20/1020/img/423586424.jpg",
     tags: ["原住民文化", "傳統祭典", "民俗信仰"],
-    essayTitle: "祭典的記憶：更生日報裡的原住民儀式與信仰",
+    essayTitle: "當世界快步向前走，為何開始回頭向部落學習慢生活？",
     essayParas: [
-      "更生日報幾十年來記錄了東台灣慶典儀式的許多切面：豐年祭的歌舞、卑南族的年祭、傳統祈福祭儀等。漢珍數位圖書與更生日報共同合作，透過數位調閱計畫將 these 泛黃的歷史檔案重現，為東台灣留下了極為珍貴的無形文化傳承記憶。"
+      "過去兩百多年來，人類一直相信自己正在進步。從蒸汽機、工業革命、民主制度，到資訊科技與人工智慧，我們創造了前所未有的物質繁榮。城市越來越大，交通越來越快，科技越來越進步。然而，在繁榮的背後，人類也面臨氣候變遷、生物多樣性流失、環境污染、精神焦慮與社會疏離等問題。這使我們不得不重新思考：究竟什麼是真正的進步？",
+      "長久以來，人們習慣將人類社會區分為『文明』與『部落』。所謂文明（Civilization），其語源與城邦、公民共同體有關，後來逐漸被用來指稱以城市聚落、國家制度、文字系統及高度社會分工為基礎的大型社會組織。然而，隨著城邦與帝國興起，許多社會也逐漸發展出階級分化、奴役制度、封建體系與權力集中等現象。近代人權思想的興起，其實正是對這些弊病的修正。十七世紀洛克受聖經的啟發，提出天賦人權觀念，認為每個人都擁有不可剝奪的生命、自由與財產權利。後來，美國獨立運動、黑奴解放運動以及反種族歧視運動，都延續了這條思想路線。",
+      "然而，當個人權利逐漸受到保障後，人類又面臨另一項挑戰：人與自然的關係脫序了。森林被砍伐，河川被污染，海洋充滿塑膠垃圾，氣候變遷威脅未來世代。於是，人們開始重新尋找答案。",
+      "令人驚訝的是，答案竟出現在許多曾被視為落後的部落文化之中。電影《與狼共舞》與《阿凡達》之所以感動世界，不只是因為故事精彩，更因為它們觸動現代人內心深處對土地、自然與生命連結的渴望。",
+      "三十多年前，我開始在臺東各原住民族部落進行生態與文化調查。從許多受殖民教育影響較少的耆老身上，我逐漸發現，他們的世界觀並非以個人為中心，而是在敬畏造物主之下，以生命共同體為中心。土地不是商品，而是祖先留下來的生命空間；河川不是資源，而是部落生命的一部分；森林、海洋、動植物不是等待開發的財富，而是共同生活的夥伴。",
+      "臺東至今仍保存許多活著的生命共同體文化。卑南族文化便是一個鮮明例子。以木雕工藝被文化部登錄為重要傳統工藝保存者的射馬干部落頭目哈古（陳文生）先生，曾表示自己是第六十九代頭目。知本部落與射馬干部落至今仍自稱為姊弟部落。日本時代人類學家馬淵東一所記錄的部落系譜，也可追溯六十多代。如此在一個地方可如此長久生存的治理體系，在人類社會實屬罕見。",
+      "對許多卑南族部落而言，歷史不只是寫在書本裡，更存在於土地之中。地質學者稱為『利吉惡地』的泥岩地形，在普悠瑪部落的口傳歷史裡，卻是神聖的祖居地，洪水傳說、兩兄弟放風箏以及卑南溪形成的故事，都與這片土地緊密相連。地景不只是地景，而是一部活著的歷史書。",
+      "高山的布農族流傳著射日神話。傳說古時因人類失序而出現兩個太陽，後來祖先射落其中一個，成為今日的月亮。月亮後來成為造物主與人立約的象徵，也提醒人們遵守土地倫理與生活規範。令人流連忘返的嘉明湖映照著月亮，因此被稱為『月亮的鏡子』，成為人與土地關係的重要象徵。",
+      "而在中央山脈東側的山腰地帶，排灣族與魯凱族世代建立的石板家屋聚落，不只是建築形式，更反映出人與山林長期共存的生活哲學。這些聚落依山勢而建，運用在地石材形成冬暖夏涼的生活空間。長期穩定的聚落生活，也孕育出優美的歌謠及豐富的雕刻、編織、花環、琉璃珠等視覺藝術文化。許多國際旅人來到臺東，驚嘆的不只是自然景觀，更是這些文化所展現的生命厚度。",
+      "另一方面，臺東東海岸也保存著珍貴的海洋文化。十多年來，我持續投入阿美族竹筏帆船文化重建工作。從耆老訪談、歷史文獻蒐集，到竹材、帆具與航海技術研究，逐步重建臺灣東海岸曾經存在的航海文化。2024年我們已成功完成綠島航線測試，證明竹筏帆船並非只是想像中的原始工具，而是具有實際航行能力的海洋技術。未來若能結合臺東博覽會等活動，讓遊客實際搭乘竹筏帆船體驗乘風破浪的感受，不只是觀光，更是理解阿美族海洋文化與南島民族遷移的人類大歷史。",
+      "遺憾的是，近代國家治理往往習慣將原住民視為個體，而非部落生命共同體。許多問題被歸因於個人或家庭失能，卻忽略了部落治理、土地關係與文化傳承被破壞的歷史背景。當生命共同體瓦解後，原本由部落承擔的教育、照顧與文化傳承功能也逐漸削弱。因此，原住民族文化復振不應只是歌舞展演或文化保存，而應重新思考如何恢復部落作為生命共同體的功能。這不只是原住民族的課題，也可能是全人類面對未來的重要課題。",
+      "或許，臺東最珍貴的資產不是風景，而是仍然活著的原住民文化。當世界面臨氣候變遷、生態危機、精神焦慮與社會疏離時，臺東的部落文化提醒我們：真正的進步，不只是科技更先進、城市更龐大，而是人能否重新找回與家族、社群、土地、自然及造物主的連結。",
+      "從卑南族的千古部落、布農族稱為『月亮的鏡子』之嘉明湖所象徵的土地倫理、阿美族的海洋文化，到排灣族與魯凱族的石板聚落，臺東保存的不只是文化資產，更可能是人類面向未來的重要答案。當全球都在尋找永續發展的道路時，臺東或許不只是西臺灣人的後山，而是世界的明日。"
+
     ],
     themeId: 4, themeIndex: "04", themeTitle: "祖先文化與土地", themeTag: "民俗信仰",
     bgImage: "https://images.unsplash.com/photo-1568093706416-302fa653623c?w=1920&h=1080&fit=crop&auto=format"
   }
 };
+
+const toStoryMediaPath = (fileName: string) => `/story-media/${encodeURIComponent(fileName)}`;
 
 const MEDIA_BY_THEME: Record<number, { src: string; thumb: string; caption: string }[]> = {
   1: [
@@ -92,7 +107,21 @@ const MEDIA_BY_THEME: Record<number, { src: string; thumb: string; caption: stri
     { src: "https://images.unsplash.com/photo-1694005892433-7c810c1e54ae?w=1200&h=800&fit=crop&auto=format", thumb: "https://images.unsplash.com/photo-1694005892433-7c810c1e54ae?w=200&h=140&fit=crop&auto=format", caption: "台東農業水圳灌溉系統，產業發展景況，約 1955 年。" },
   ],
   4: [
-    { src: "https://images.unsplash.com/photo-1568093706416-302fa653623c?w=1200&h=800&fit=crop&auto=format", thumb: "https://images.unsplash.com/photo-1568093706416-302fa653623c?w=200&h=140&fit=crop&auto=format", caption: "台東民俗信仰燈籠節慶夜間儀式，約 1970 年代。" },
+    {
+      src: toStoryMediaPath("2015.4.1 利稻長老教會卡法司牧師帶領長榮大學布農族團契為高山湖泊取名Cinanuma buan (月亮的鏡子).jpg"),
+      thumb: toStoryMediaPath("2015.4.1 利稻長老教會卡法司牧師帶領長榮大學布農族團契為高山湖泊取名Cinanuma buan (月亮的鏡子).jpg"),
+      caption: "利稻長老教會卡法司牧師帶領長榮大學布農族團契為高山湖泊取名Cinanuma buan (月亮的鏡子)"
+    },
+    {
+      src: toStoryMediaPath("在台東縣金峰鄉嘉蘭村重建的霧台鄉好茶部落魯凱族石板家屋.jpg"),
+      thumb: toStoryMediaPath("在台東縣金峰鄉嘉蘭村重建的霧台鄉好茶部落魯凱族石板家屋.jpg"),
+      caption: "在台東縣金峰鄉嘉蘭村重建的霧台鄉好茶部落魯凱族石板家屋"
+    },
+    {
+      src: toStoryMediaPath("阿美族竹筏帆船.jpg"),
+      thumb: toStoryMediaPath("阿美族竹筏帆船.jpg"),
+      caption: "阿美族竹筏帆船"
+    }
   ],
 };
 
@@ -113,6 +142,7 @@ export function StoryPage({ speakerId, onBack, onNavigate }: Props) {
   const [resolvedPreviewImage, setResolvedPreviewImage] = useState("/news/placeholder-newspaper.svg");
   const [resolvedFullImage, setResolvedFullImage] = useState("/news/placeholder-newspaper.svg");
   const [resolvedImageCandidates, setResolvedImageCandidates] = useState<string[]>([]);
+  const [isPreviewImageLoading, setIsPreviewImageLoading] = useState(false);
 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -131,24 +161,34 @@ export function StoryPage({ speakerId, onBack, onNavigate }: Props) {
   useEffect(() => {
     let cancelled = false;
 
+    setIsPreviewImageLoading(true);
+    setResolvedImageCandidates([]);
+    setResolvedPreviewImage("/news/placeholder-newspaper.svg");
+    setResolvedFullImage("/news/placeholder-newspaper.svg");
+
     if (!currentReport) {
-      setResolvedPreviewImage("/news/placeholder-newspaper.svg");
-      setResolvedFullImage("/news/placeholder-newspaper.svg");
+      setIsPreviewImageLoading(false);
       return () => {
         cancelled = true;
       };
     }
 
     const loadCandidates = async () => {
-      const candidates = await resolveReportImageCandidates(sp.name, currentReport.date);
-      if (!cancelled) {
-        setResolvedImageCandidates(candidates);
-        setResolvedPreviewImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
-        setResolvedFullImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
+      try {
+        const candidates = await resolveReportImageCandidates(sp.name, currentReport.date);
+        if (!cancelled) {
+          setResolvedImageCandidates(candidates);
+          setResolvedPreviewImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
+          setResolvedFullImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
+        }
+      } finally {
+        if (!cancelled) {
+          setIsPreviewImageLoading(false);
+        }
       }
     };
 
-    loadCandidates();
+    void loadCandidates();
 
     return () => {
       cancelled = true;
@@ -297,13 +337,39 @@ export function StoryPage({ speakerId, onBack, onNavigate }: Props) {
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "stretch" }}>
                     <div style={{ flex: "1 1 min(50%, 360px)", minWidth: 0, borderTop: `1px solid ${BORDER}`, paddingTop: 16, fontSize: "1.0rem", color: "rgba(237,237,240,0.8)", lineHeight: 1.7, fontFamily: FONT_NOTO, whiteSpace: "normal", wordBreak: "break-word" }}><span style={{ display: "block", color: FG_MUTED, fontSize: "0.95rem", marginBottom: 6, fontWeight: 700 }}>報導摘要大綱</span>{currentReport.summary}</div>
                     <button
+                      disabled={isPreviewImageLoading || !currentReport}
                       onClick={async () => {
+                        if (isPreviewImageLoading || !currentReport) {
+                          return;
+                        }
+
+                        const initialImageCandidates = resolvedImageCandidates.length > 0
+                          ? resolvedImageCandidates
+                          : [resolvedPreviewImage];
+                        const firstImage = initialImageCandidates[0] ?? "/news/placeholder-newspaper.svg";
+                        const imagesParam = encodeURIComponent(JSON.stringify(initialImageCandidates));
+                        const previewWindow = window.open(`/newspaper-preview.html?src=${encodeURIComponent(firstImage)}&images=${imagesParam}&page=speakerProfile&speakerId=${speakerId}&reportDate=${encodeURIComponent(currentReport.date)}`, "_blank", "noopener,noreferrer");
+
+                        if (!previewWindow) {
+                          return;
+                        }
+
                         const imageCandidates = resolvedImageCandidates.length > 0
                           ? resolvedImageCandidates
                           : await resolveReportImageCandidates(sp.name, currentReport.date);
-                        const firstImage = imageCandidates[0] ?? "/news/placeholder-newspaper.svg";
-                        const imagesParam = encodeURIComponent(JSON.stringify(imageCandidates));
-                        window.open(`/newspaper-preview.html?src=${encodeURIComponent(firstImage)}&images=${imagesParam}&page=speakerProfile&speakerId=${speakerId}&reportDate=${encodeURIComponent(currentReport.date)}`, "_blank", "noopener,noreferrer");
+
+                        setResolvedImageCandidates(imageCandidates);
+                        setResolvedPreviewImage(imageCandidates[0] ?? "/news/placeholder-newspaper.svg");
+
+                        setTimeout(() => {
+                          previewWindow.postMessage({
+                            type: "preview-images",
+                            images: imageCandidates,
+                            page: "speakerProfile",
+                            speakerId,
+                            reportDate: currentReport.date,
+                          }, window.location.origin);
+                        }, 120);
                       }}
                       style={{
                         flex: "1 1 min(50%, 360px)",
@@ -314,16 +380,26 @@ export function StoryPage({ speakerId, onBack, onNavigate }: Props) {
                         background: "rgba(255,255,255,0.03)",
                         borderRadius: 12,
                         overflow: "hidden",
-                        cursor: "pointer",
+                        cursor: isPreviewImageLoading ? "wait" : "pointer",
                         textAlign: "left",
                         color: FG,
-                        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)"
+                        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
+                        opacity: isPreviewImageLoading ? 0.9 : 1
                       }}
                     >
-                      <img src={resolvedPreviewImage} alt={`報紙預覽：${currentReport.title}`} style={{ width: "100%", height: 180, objectFit: "cover", display: "block" }} />
+                      <div style={{ position: "relative", width: "100%", height: 180, background: "linear-gradient(135deg, rgba(120,194,196,0.16), rgba(255,255,255,0.04))", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        {isPreviewImageLoading ? (
+                          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center", padding: "0 16px" }}>
+                            <div style={{ width: 36, height: 36, borderRadius: "50%", border: `3px solid rgba(120, 194, 196, 0.24)`, borderTopColor: BLUE, animation: "spin 0.9s linear infinite" }} />
+                            <div style={{ fontFamily: FONT_NOTO, color: FG, fontWeight: 700, fontSize: "0.92rem" }}>圖像載入中</div>
+                          </div>
+                        ) : (
+                          <img src={resolvedPreviewImage} alt={`報紙預覽：${currentReport.title}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                        )}
+                      </div>
                       <div style={{ padding: "10px 12px", fontFamily: FONT_NOTO, fontSize: "0.92rem", color: FG, borderTop: `1px solid ${BORDER}` }}>
-                        <div style={{ fontWeight: 700, color: BLUE, marginBottom: 4 }}>開啟報紙預覽</div>
-                        <div style={{ color: FG_MUTED, fontSize: "0.84rem" }}>點擊可查看完整報紙圖片內容</div>
+                        <div style={{ fontWeight: 700, color: BLUE, marginBottom: 4 }}>{isPreviewImageLoading ? "資料整理中" : "開啟報紙預覽"}</div>
+                        <div style={{ color: FG_MUTED, fontSize: "0.84rem" }}>{isPreviewImageLoading ? "請稍候，系統正在載入該日期報導對應圖像" : "點擊可查看完整報紙圖片內容"}</div>
                       </div>
                     </button>
                   </div>

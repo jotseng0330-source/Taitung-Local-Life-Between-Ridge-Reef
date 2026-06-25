@@ -139,40 +139,40 @@ export function getReportImagePaths(speakerName: string, reportDate: string) {
 export async function resolveReportImageCandidates(speakerName: string, reportDate: string) {
   const candidates = buildReportImageCandidates(speakerName, reportDate);
   const fallback = "/news/placeholder-newspaper.svg";
-  const resolvedCandidates: string[] = [];
-  const timeoutMs = 6000;
-  const startedAt = Date.now();
+  const perImageTimeoutMs = 5000;
 
-  for (const candidate of candidates) {
-    if (Date.now() - startedAt > timeoutMs) {
-      break;
-    }
-
-    const exists = await new Promise<boolean>((resolve) => {
+  // 同時檢查「所有」候選路徑是否存在，而不是排隊一個個依序檢查。
+  // 這樣整體搜尋時間大約只等於一次網路來回，不會因為候選路徑數量變多
+  // （例如某篇報導有 9 張圖、要試 80 多種檔名／副檔名組合）而被中途截斷。
+  const checkImage = (candidate: string) =>
+    new Promise<{ candidate: string; exists: boolean }>((resolve) => {
       const image = new Image();
       image.decoding = "async";
       const timer = window.setTimeout(() => {
         image.onload = null;
         image.onerror = null;
-        resolve(false);
-      }, timeoutMs / 2);
+        resolve({ candidate, exists: false });
+      }, perImageTimeoutMs);
 
       image.onload = () => {
         window.clearTimeout(timer);
-        resolve(true);
+        resolve({ candidate, exists: true });
       };
       image.onerror = () => {
         window.clearTimeout(timer);
-        resolve(false);
+        resolve({ candidate, exists: false });
       };
       image.src = candidate;
     });
 
-    if (exists) {
-      resolvedCandidates.push(candidate);
-      if (resolvedCandidates.length >= 26) break;
-    }
-  }
+  const results = await Promise.all(candidates.map(checkImage));
+
+  // Promise.all 回傳的陣列順序會跟輸入順序一致（即使各個請求完成的時間點不同），
+  // 所以這裡濾掉不存在的之後，仍會維持原本「日期 → A → B → C ...」的排序。
+  const resolvedCandidates = results
+    .filter((result) => result.exists)
+    .map((result) => result.candidate)
+    .slice(0, 26);
 
   return resolvedCandidates.length > 0 ? resolvedCandidates : [fallback];
 }

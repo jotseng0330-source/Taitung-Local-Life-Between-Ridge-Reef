@@ -140,7 +140,7 @@ export async function resolveReportImageCandidates(speakerName: string, reportDa
   const candidates = buildReportImageCandidates(speakerName, reportDate);
   const fallback = "/news/placeholder-newspaper.svg";
   const resolvedCandidates: string[] = [];
-  const timeoutMs = 2500;
+  const timeoutMs = 6000;
   const startedAt = Date.now();
 
   for (const candidate of candidates) {
@@ -170,11 +170,134 @@ export async function resolveReportImageCandidates(speakerName: string, reportDa
 
     if (exists) {
       resolvedCandidates.push(candidate);
-      if (resolvedCandidates.length >= 4) break;
+      if (resolvedCandidates.length >= 26) break;
     }
   }
 
   return resolvedCandidates.length > 0 ? resolvedCandidates : [fallback];
+}
+
+/**
+ * 共用 hook：依「講者姓名 + 目前報導」自動載入對應的報紙影像候選清單。
+ * CalendarPage 與 StoryPage 都呼叫這支 hook，確保兩邊行為永遠一致。
+ */
+export function useReportImageResolver(
+  speakerName: string,
+  currentReport: { date: string } | undefined
+) {
+  const [resolvedPreviewImage, setResolvedPreviewImage] = useState("/news/placeholder-newspaper.svg");
+  const [resolvedFullImage, setResolvedFullImage] = useState("/news/placeholder-newspaper.svg");
+  const [resolvedImageCandidates, setResolvedImageCandidates] = useState<string[]>([]);
+  const [isPreviewImageLoading, setIsPreviewImageLoading] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    setIsPreviewImageLoading(true);
+    setResolvedImageCandidates([]);
+    setResolvedPreviewImage("/news/placeholder-newspaper.svg");
+    setResolvedFullImage("/news/placeholder-newspaper.svg");
+
+    if (!currentReport) {
+      setIsPreviewImageLoading(false);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    const loadCandidates = async () => {
+      try {
+        const candidates = await resolveReportImageCandidates(speakerName, currentReport.date);
+        if (!cancelled) {
+          setResolvedImageCandidates(candidates);
+          setResolvedPreviewImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
+          setResolvedFullImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
+        }
+      } finally {
+        if (!cancelled) {
+          setIsPreviewImageLoading(false);
+        }
+      }
+    };
+
+    void loadCandidates();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [currentReport, speakerName]);
+
+  return {
+    resolvedPreviewImage,
+    resolvedFullImage,
+    resolvedImageCandidates,
+    setResolvedImageCandidates,
+    setResolvedPreviewImage,
+    isPreviewImageLoading,
+  };
+}
+
+export interface OpenNewspaperPreviewArgs {
+  speakerName: string;
+  currentReport: { date: string } | undefined;
+  resolvedImageCandidates: string[];
+  resolvedPreviewImage: string;
+  setResolvedImageCandidates: (images: string[]) => void;
+  setResolvedPreviewImage: (image: string) => void;
+  page: string;
+  speakerId: string;
+  themeId?: number | string;
+}
+
+/**
+ * 共用函式：開啟「報紙預覽」彈出視窗，並把目前已解析到的圖片清單透過 postMessage 傳給彈出頁。
+ * CalendarPage 與 StoryPage 的「開啟報紙預覽」按鈕都呼叫這支函式，避免兩邊各自維護一份邏輯。
+ */
+export async function openNewspaperPreview({
+  speakerName,
+  currentReport,
+  resolvedImageCandidates,
+  resolvedPreviewImage,
+  setResolvedImageCandidates,
+  setResolvedPreviewImage,
+  page,
+  speakerId,
+  themeId,
+}: OpenNewspaperPreviewArgs) {
+  if (!currentReport) return;
+
+  const initialImageCandidates = resolvedImageCandidates.length > 0
+    ? resolvedImageCandidates
+    : [resolvedPreviewImage];
+  const firstImage = initialImageCandidates[0] ?? "/news/placeholder-newspaper.svg";
+  const imagesParam = encodeURIComponent(JSON.stringify(initialImageCandidates));
+
+  let url = `/newspaper-preview.html?src=${encodeURIComponent(firstImage)}&images=${imagesParam}&page=${encodeURIComponent(page)}`;
+  if (themeId !== undefined) {
+    url += `&themeId=${encodeURIComponent(String(themeId))}`;
+  }
+  url += `&speakerId=${encodeURIComponent(speakerId)}&reportDate=${encodeURIComponent(currentReport.date)}`;
+
+  const previewWindow = window.open(url, "_blank", "noopener,noreferrer");
+  if (!previewWindow) return;
+
+  const imageCandidates = resolvedImageCandidates.length > 0
+    ? resolvedImageCandidates
+    : await resolveReportImageCandidates(speakerName, currentReport.date);
+
+  setResolvedImageCandidates(imageCandidates);
+  setResolvedPreviewImage(imageCandidates[0] ?? "/news/placeholder-newspaper.svg");
+
+  setTimeout(() => {
+    previewWindow.postMessage({
+      type: "preview-images",
+      images: imageCandidates,
+      page,
+      ...(themeId !== undefined ? { themeId } : {}),
+      speakerId,
+      reportDate: currentReport.date,
+    }, window.location.origin);
+  }, 120);
 }
 
 interface Props {
@@ -212,47 +335,15 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
   const currentReports = activeSpeakerId ? (REPORTS_BY_SPEAKER[activeSpeakerId] ?? []) : [];
   const currentReport = currentReports[reportIndex];
   const currentSpeakerName = (SPEAKERS_BY_THEME[Number(selectedTheme)] || []).find((speaker) => speaker.id === activeSpeakerId)?.name ?? "";
-  const [resolvedPreviewImage, setResolvedPreviewImage] = useState("/news/placeholder-newspaper.svg");
-  const [resolvedFullImage, setResolvedFullImage] = useState("/news/placeholder-newspaper.svg");
-  const [resolvedImageCandidates, setResolvedImageCandidates] = useState<string[]>([]);
-  const [isPreviewImageLoading, setIsPreviewImageLoading] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    setIsPreviewImageLoading(true);
-    setResolvedImageCandidates([]);
-    setResolvedPreviewImage("/news/placeholder-newspaper.svg");
-    setResolvedFullImage("/news/placeholder-newspaper.svg");
-
-    if (!currentReport) {
-      setIsPreviewImageLoading(false);
-      return () => {
-        cancelled = true;
-      };
-    }
-
-    const loadCandidates = async () => {
-      try {
-        const candidates = await resolveReportImageCandidates(currentSpeakerName, currentReport.date);
-        if (!cancelled) {
-          setResolvedImageCandidates(candidates);
-          setResolvedPreviewImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
-          setResolvedFullImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
-        }
-      } finally {
-        if (!cancelled) {
-          setIsPreviewImageLoading(false);
-        }
-      }
-    };
-
-    void loadCandidates();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [currentReport, currentSpeakerName]);
+  const {
+    resolvedPreviewImage,
+    resolvedFullImage,
+    resolvedImageCandidates,
+    setResolvedImageCandidates,
+    setResolvedPreviewImage,
+    isPreviewImageLoading,
+  } = useReportImageResolver(currentSpeakerName, currentReport);
 
   function pickTheme(id: number) {
     setSelectedTheme(id);
@@ -401,39 +492,21 @@ export function CalendarPage({ defaultThemeId, onNavigate }: Props) {
                       <div style={{ flex: "1 1 min(50%, 360px)", minWidth: 0, borderTop: `1px solid ${BORDER}`, paddingTop: 16, fontSize: "1.0rem", color: "rgba(237,237,240,0.8)", lineHeight: 1.7, fontFamily: FONT_NOTO, whiteSpace: "normal", wordBreak: "break-word" }}><span style={{ display: "block", color: FG_MUTED, fontSize: "0.95rem", marginBottom: 6, fontWeight: 700 }}>報導摘要大綱</span>{currentReport.summary}</div>
                       <button
                         disabled={isPreviewImageLoading || !currentReport}
-                        onClick={async () => {
+                        onClick={() => {
                           if (isPreviewImageLoading || !currentReport) {
                             return;
                           }
-
-                          const initialImageCandidates = resolvedImageCandidates.length > 0
-                            ? resolvedImageCandidates
-                            : [resolvedPreviewImage];
-                          const firstImage = initialImageCandidates[0] ?? "/news/placeholder-newspaper.svg";
-                          const imagesParam = encodeURIComponent(JSON.stringify(initialImageCandidates));
-                          const previewWindow = window.open(`/newspaper-preview.html?src=${encodeURIComponent(firstImage)}&images=${imagesParam}&page=calendar&themeId=${selectedTheme ?? ""}&speakerId=${activeSpeakerId}&reportDate=${encodeURIComponent(currentReport.date)}`, "_blank", "noopener,noreferrer");
-
-                          if (!previewWindow) {
-                            return;
-                          }
-
-                          const imageCandidates = resolvedImageCandidates.length > 0
-                            ? resolvedImageCandidates
-                            : await resolveReportImageCandidates(currentSpeakerName, currentReport.date);
-
-                          setResolvedImageCandidates(imageCandidates);
-                          setResolvedPreviewImage(imageCandidates[0] ?? "/news/placeholder-newspaper.svg");
-
-                          setTimeout(() => {
-                            previewWindow.postMessage({
-                              type: "preview-images",
-                              images: imageCandidates,
-                              page: "calendar",
-                              themeId: selectedTheme ?? "",
-                              speakerId: activeSpeakerId,
-                              reportDate: currentReport.date,
-                            }, window.location.origin);
-                          }, 120);
+                          void openNewspaperPreview({
+                            speakerName: currentSpeakerName,
+                            currentReport,
+                            resolvedImageCandidates,
+                            resolvedPreviewImage,
+                            setResolvedImageCandidates,
+                            setResolvedPreviewImage,
+                            page: "calendar",
+                            speakerId: activeSpeakerId,
+                            themeId: selectedTheme ?? "",
+                          });
                         }}
                         style={{
                           flex: "1 1 min(50%, 360px)",

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ArchiveCalendar } from "./ArchiveCalendar";
-import { REPORTS_BY_SPEAKER, resolveReportImageCandidates } from "./CalendarPage"; 
+import { REPORTS_BY_SPEAKER, useReportImageResolver, openNewspaperPreview } from "./CalendarPage"; 
 import Header from "./Header";
 import ScrollHint from "./ScrollHint";
 import type { NavPage } from "../types/navigation";
@@ -114,21 +114,7 @@ const MEDIA_BY_THEME: Record<number, { src: string; thumb: string; caption: stri
     }
   ],
   2: [
-    {
-      src: toStoryMediaPath("徐千惠", "台東兒童故事館.jpg"),
-      thumb: toStoryMediaPath("徐千惠", "台東兒童故事館.jpg"),
-      caption: "台東兒童故事館"
-    },
-    {
-      src: toStoryMediaPath("徐千惠", "披海為被織就土地上的文學夢：114年後山文學獎及年度新人獎頒獎典禮暨新書發表會.jpg"),
-      thumb: toStoryMediaPath("徐千惠", "披海為被織就土地上的文學夢：114年後山文學獎及年度新人獎頒獎典禮暨新書發表會.jpg"),
-      caption: "披海為被織就土地上的文學夢：114年後山文學獎及年度新人獎頒獎典禮暨新書發表會"
-    },
-    {
-      src: toStoryMediaPath("徐千惠", "臺東大學兒童文學研究所.jpg"),
-      thumb: toStoryMediaPath("徐千惠", "臺東大學兒童文學研究所.jpg"),
-      caption: "臺東大學兒童文學研究所"
-    }
+    { src: "https://images.unsplash.com/photo-1601482919158-1af01b70a427?w=1200&h=800&fit=crop&auto=format", thumb: "https://images.unsplash.com/photo-1601482919158-1af01b70a427?w=200&h=140&fit=crop&auto=format", caption: "台東在地藝文展覽與文藝聚會現場，約 1970 年代。" },
   ],
   3: [
     { src: "https://images.unsplash.com/photo-1694005892433-7c810c1e54ae?w=1200&h=800&fit=crop&auto=format", thumb: "https://images.unsplash.com/photo-1694005892433-7c810c1e54ae?w=200&h=140&fit=crop&auto=format", caption: "台東農業水圳灌溉系統，產業發展景況，約 1955 年。" },
@@ -166,10 +152,6 @@ export function StoryPage({ speakerId, onBack, onNavigate }: Props) {
   const speakerReports = REPORTS_BY_SPEAKER[speakerId] ?? [];
   const currentReport = speakerReports[localReportIndex];
   const media = MEDIA_BY_THEME[sp.themeId] ?? [];
-  const [resolvedPreviewImage, setResolvedPreviewImage] = useState("/news/placeholder-newspaper.svg");
-  const [resolvedFullImage, setResolvedFullImage] = useState("/news/placeholder-newspaper.svg");
-  const [resolvedImageCandidates, setResolvedImageCandidates] = useState<string[]>([]);
-  const [isPreviewImageLoading, setIsPreviewImageLoading] = useState(false);
 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -185,42 +167,14 @@ export function StoryPage({ speakerId, onBack, onNavigate }: Props) {
     setActiveImg(0);
   }, [speakerId]);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    setIsPreviewImageLoading(true);
-    setResolvedImageCandidates([]);
-    setResolvedPreviewImage("/news/placeholder-newspaper.svg");
-    setResolvedFullImage("/news/placeholder-newspaper.svg");
-
-    if (!currentReport) {
-      setIsPreviewImageLoading(false);
-      return () => {
-        cancelled = true;
-      };
-    }
-
-    const loadCandidates = async () => {
-      try {
-        const candidates = await resolveReportImageCandidates(sp.name, currentReport.date);
-        if (!cancelled) {
-          setResolvedImageCandidates(candidates);
-          setResolvedPreviewImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
-          setResolvedFullImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
-        }
-      } finally {
-        if (!cancelled) {
-          setIsPreviewImageLoading(false);
-        }
-      }
-    };
-
-    void loadCandidates();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [currentReport, sp.name]);
+  const {
+    resolvedPreviewImage,
+    resolvedFullImage,
+    resolvedImageCandidates,
+    setResolvedImageCandidates,
+    setResolvedPreviewImage,
+    isPreviewImageLoading,
+  } = useReportImageResolver(sp.name, currentReport);
 
   return (
     <div style={{ fontFamily: FONT_NOTO, background: BG, color: FG, minHeight: "100vh", position: "relative" }}>
@@ -365,38 +319,20 @@ export function StoryPage({ speakerId, onBack, onNavigate }: Props) {
                     <div style={{ flex: "1 1 min(50%, 360px)", minWidth: 0, borderTop: `1px solid ${BORDER}`, paddingTop: 16, fontSize: "1.0rem", color: "rgba(237,237,240,0.8)", lineHeight: 1.7, fontFamily: FONT_NOTO, whiteSpace: "normal", wordBreak: "break-word" }}><span style={{ display: "block", color: FG_MUTED, fontSize: "0.95rem", marginBottom: 6, fontWeight: 700 }}>報導摘要大綱</span>{currentReport.summary}</div>
                     <button
                       disabled={isPreviewImageLoading || !currentReport}
-                      onClick={async () => {
+                      onClick={() => {
                         if (isPreviewImageLoading || !currentReport) {
                           return;
                         }
-
-                        const initialImageCandidates = resolvedImageCandidates.length > 0
-                          ? resolvedImageCandidates
-                          : [resolvedPreviewImage];
-                        const firstImage = initialImageCandidates[0] ?? "/news/placeholder-newspaper.svg";
-                        const imagesParam = encodeURIComponent(JSON.stringify(initialImageCandidates));
-                        const previewWindow = window.open(`/newspaper-preview.html?src=${encodeURIComponent(firstImage)}&images=${imagesParam}&page=speakerProfile&speakerId=${speakerId}&reportDate=${encodeURIComponent(currentReport.date)}`, "_blank", "noopener,noreferrer");
-
-                        if (!previewWindow) {
-                          return;
-                        }
-
-                        const imageCandidates = resolvedImageCandidates.length > 0
-                          ? resolvedImageCandidates
-                          : await resolveReportImageCandidates(sp.name, currentReport.date);
-
-                        setResolvedImageCandidates(imageCandidates);
-                        setResolvedPreviewImage(imageCandidates[0] ?? "/news/placeholder-newspaper.svg");
-
-                        setTimeout(() => {
-                          previewWindow.postMessage({
-                            type: "preview-images",
-                            images: imageCandidates,
-                            page: "speakerProfile",
-                            speakerId,
-                            reportDate: currentReport.date,
-                          }, window.location.origin);
-                        }, 120);
+                        void openNewspaperPreview({
+                          speakerName: sp.name,
+                          currentReport,
+                          resolvedImageCandidates,
+                          resolvedPreviewImage,
+                          setResolvedImageCandidates,
+                          setResolvedPreviewImage,
+                          page: "speakerProfile",
+                          speakerId,
+                        });
                       }}
                       style={{
                         flex: "1 1 min(50%, 360px)",

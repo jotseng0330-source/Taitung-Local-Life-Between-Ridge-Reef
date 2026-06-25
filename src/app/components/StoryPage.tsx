@@ -114,7 +114,21 @@ const MEDIA_BY_THEME: Record<number, { src: string; thumb: string; caption: stri
     }
   ],
   2: [
-    { src: "https://images.unsplash.com/photo-1601482919158-1af01b70a427?w=1200&h=800&fit=crop&auto=format", thumb: "https://images.unsplash.com/photo-1601482919158-1af01b70a427?w=200&h=140&fit=crop&auto=format", caption: "台東在地藝文展覽與文藝聚會現場，約 1970 年代。" },
+    {
+      src: toStoryMediaPath("徐千惠", "台東兒童故事館.jpg"),
+      thumb: toStoryMediaPath("徐千惠", "台東兒童故事館.jpg"),
+      caption: "台東兒童故事館"
+    },
+    {
+      src: toStoryMediaPath("徐千惠", "披海為被織就土地上的文學夢：114年後山文學獎及年度新人獎頒獎典禮暨新書發表會.jpg"),
+      thumb: toStoryMediaPath("徐千惠", "披海為被織就土地上的文學夢：114年後山文學獎及年度新人獎頒獎典禮暨新書發表會.jpg"),
+      caption: "披海為被織就土地上的文學夢：114年後山文學獎及年度新人獎頒獎典禮暨新書發表會"
+    },
+    {
+      src: toStoryMediaPath("徐千惠", "臺東大學兒童文學研究所.jpg"),
+      thumb: toStoryMediaPath("徐千惠", "臺東大學兒童文學研究所.jpg"),
+      caption: "臺東大學兒童文學研究所"
+    }
   ],
   3: [
     { src: "https://images.unsplash.com/photo-1694005892433-7c810c1e54ae?w=1200&h=800&fit=crop&auto=format", thumb: "https://images.unsplash.com/photo-1694005892433-7c810c1e54ae?w=200&h=140&fit=crop&auto=format", caption: "台東農業水圳灌溉系統，產業發展景況，約 1955 年。" },

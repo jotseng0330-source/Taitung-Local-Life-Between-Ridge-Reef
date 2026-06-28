@@ -29,7 +29,7 @@ const THEME_GROUPS = [
   {
     themeId: 3, index: "03", title: "地方特色產業發展", tag: "產業史",
     speakers: [
-      { speakerId: "3-0" as SpeakerId, name: "許秀孟", honorific: "教授", institution: "國立台東大學文化資源與休閒產業學系", topic: "魚苗與香茅", portrait: "https://nrchisp.nttu.edu.tw/var/file/63/1063/img/674163412.jpg" },
+      { speakerId: "3-0" as SpeakerId, name: "許秀孟", honorific: "博士後研究員", institution: "國立臺東大學人文創新與社會實踐中心", topic: "傳統產業發展", portrait: "https://nrchisp.nttu.edu.tw/var/file/63/1063/img/674163412.jpg" },
     ],
   },
   {

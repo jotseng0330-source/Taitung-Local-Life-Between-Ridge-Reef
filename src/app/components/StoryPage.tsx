@@ -57,9 +57,9 @@ const SPEAKER_DATA: Record<SpeakerId, {
     bgImage: "https://images.unsplash.com/photo-1601482919158-1af01b70a427?w=1920&h=1080&fit=crop&auto=format"
   },
   "3-0": {
-    name: "許秀孟", honorific: "教授", institution: "國立台東大學文化資源與休閒產業學系", topic: "魚苗與香茅",
+    name: "許秀孟", honorific: "博士後研究員", institution: "國立臺東大學人文創新與社會實踐中心", topic: "傳統產業發展",
     portrait: "https://nrchisp.nttu.edu.tw/var/file/63/1063/img/674163412.jpg",
-    tags: ["台東產業史", "魚苗養殖", "香茅農業"],
+    tags: ["台東產業史", "香茅與荖葉", "稻米與漁業"],
     essayTitle: "太平洋畔的芬芳：側看臺東物產六十年流變",
     essayParas: [
       "臺東，面迎太平洋的溫熱海風，背倚中央山脈與海岸山脈的環抱，在過去六十年間，透過這片山海孕育出的獨特氣味，構築一幅流動的感官地圖。從山風中飄散的香茅與荖葉辛香，到縱谷稻田中蒸騰的純粹米香，再到海風送來的潮浪鹹香與漁滋味，臺東的物產不只是經濟活動，還是這片土地韌性與創新的故事。",

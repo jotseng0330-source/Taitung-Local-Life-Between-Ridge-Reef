@@ -2,9 +2,11 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
-export default defineConfig({
-  // 🛠️ 確保 Vercel 打包路徑絕對正確
-  base: './',
+export default defineConfig(({ command }) => ({
+  // 🛠️ 只在「npm run build」（給 Vercel 用的正式建置）時用相對路徑，
+  // 開發伺服器（npm run dev，例如在 Codespaces 裡跑）維持預設的絕對路徑 '/'。
+  // 用相對路徑跑開發伺服器，透過 Codespaces 轉送網址存取時很容易被誤判成 404。
+  base: command === 'build' ? './' : '/',
 
   plugins: [
     {
@@ -14,7 +16,7 @@ export default defineConfig({
           const filename = id.replace('figma:asset/', '')
           return `./src/assets/${filename}`
         }
-        return null // 🎯 最關鍵的一行！如果不是 figma 資源，必須回傳 null 讓 Vite 繼續正常解析別的檔案！
+        return null
       },
     },
     react(),
@@ -22,7 +24,7 @@ export default defineConfig({
   ],
   server: {
     host: '0.0.0.0',
-    port: 3000, 
+    port: 8000, 
     strictPort: true,
     allowedHosts: true,
     hmr: {
@@ -36,4 +38,4 @@ export default defineConfig({
     },
   },
   assetsInclude: ['**/*.svg', '**/*.csv'],
-})
+}))

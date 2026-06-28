@@ -28,7 +28,7 @@ const SPEAKERS_BY_THEME: Record<number, Array<{ id: string; name: string; subTop
     { id: "2-0", name: "徐千惠 老師", subTopic: "台東兒童文學發展" }
   ],
   3: [
-    { id: "3-0", name: "許秀孟 教授", subTopic: "魚苗與香茅" }
+    { id: "3-0", name: "許秀孟 博士後研究員", subTopic: "傳統產業發展" }
   ],
   4: [
     { id: "4-0", name: "劉烱錫 主任", subTopic: "原住民族部落永續發展" }

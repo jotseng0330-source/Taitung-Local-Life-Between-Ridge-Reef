@@ -31,7 +31,7 @@ const SPEAKERS_BY_THEME: Record<number, Array<{ id: string; name: string; subTop
     { id: "3-0", name: "許秀孟 教授", subTopic: "魚苗與香茅" }
   ],
   4: [
-    { id: "4-0", name: "黃琴扉 教授", subTopic: "原住民文化與傳統儀式" }
+    { id: "4-0", name: "劉烱錫 主任", subTopic: "原住民族部落永續發展" }
   ]
 };
 
@@ -39,6 +39,7 @@ export const REPORTS_BY_SPEAKER: Record<string, Array<{
   date: string; year: number; month: number; day: number;
   title: string; reporter: string; summary: string; newspaperUrl: string;
   previewImage?: string; fullImage?: string;
+  imageCount?: number; // 已知這篇報導實際有幾張圖時填寫，程式會直接信任、不再逐張猜測檢查
 }>> = {
   "1-1": [
     { 
@@ -49,7 +50,8 @@ export const REPORTS_BY_SPEAKER: Record<string, Array<{
       title: "北迴鐵路興建工程 今天自南北兩端開工", 
       reporter: "更生日報記者群", 
       summary: "北迴鐵路工程於今日正式展開南北兩端同時開工之歷史新頁。此項被列為國家重大經濟建設之首要工程，北自蘇澳、南至花蓮新站，全長達八十餘公里。主體工程由臺灣省鐵路局與榮民工程處協力承建，預計克服崇山峻嶺與無數隧道之艱難挑戰。通車後將徹底打破東部百年來受山海阻隔之交通孤島困境，對繁榮東部經濟、加速物資調度具有劃時代的戰略與民生里程碑意義。", 
-      newspaperUrl: "https://www.ksnews.com.tw/" 
+      newspaperUrl: "https://www.ksnews.com.tw/",
+      imageCount: 3
     },
     { 
       date: "1977-12-01", 
@@ -59,7 +61,8 @@ export const REPORTS_BY_SPEAKER: Record<string, Array<{
       title: "東線鐵路拓寬 提前12日開工", 
       reporter: "更生日報記者群", 
       summary: "東部交通建設迎來重大進展！攸關地方發展至鉅的東線鐵路拓寬工程，已確定提前 12 日於今日（12月1日）正式開工。臺灣省鐵路局東線鐵路拓寬工程處亦於今日正式成立，負責統籌整體拓寬工程。本工程旨在將現行狹軌軌道全面拓寬為標準軌距，以提昇東部鐵路的運輸效能。更生日報記者群詳實記錄，本工程處的成立與提前開工，象徵東部鐵路全面現代化的開端，完工後將能有效解決東部常年運能不足、與西部鐵路系統無法接軌之難題，對促進花東地區經濟繁榮具有關鍵意義。", 
-      newspaperUrl: "https://www.ksnews.com.tw/" 
+      newspaperUrl: "https://www.ksnews.com.tw/",
+      imageCount: 1
     },
     { 
       date: "1980-02-01", 
@@ -69,7 +72,8 @@ export const REPORTS_BY_SPEAKER: Record<string, Array<{
       title: "開發東部邁進新里程碑 · 北迴鐵路今舉行通車禮", 
       reporter: "更生日報記者群", 
       summary: "數十年宿願今日實現！北迴鐵路於今日（2月1日）舉行盛大正式通車典禮。此項被譽為『鐵路北迴 鬼斧神工』的艱鉅工程，歷經多年與崇山峻嶺之搏鬥，克服了無數隧道與地質挑戰，終於全線竣工通車。通車首日，東台灣軍民萬眾歡騰、煙火齊放。北迴鐵路的正式營運，不僅實現了台灣環島鐵路網的關鍵一環，更徹底打破東部長期因交通不便造成的產業發展限制，正式宣告東台灣交通與經濟邁入嶄新里程碑。", 
-      newspaperUrl: "https://www.ksnews.com.tw/" 
+      newspaperUrl: "https://www.ksnews.com.tw/",
+      imageCount: 9
     },
     { 
       date: "1980-07-01", 
@@ -79,7 +83,8 @@ export const REPORTS_BY_SPEAKER: Record<string, Array<{
       title: "民眾展開多采多姿活動 · 熱烈慶祝南迴鐵路開工", 
       reporter: "更生日報記者群", 
       summary: "東部與南部交通建設迎來歷史性的一刻！南迴鐵路工程於今日（7月1日）在台東正式舉行開工典禮。此項工程西起屏東枋寮、東至台東新站，全長達九十餘公里。主體工程由臺灣省鐵路局全力打造，預計挑戰貫穿中央山脈南段、開鑿三十餘座複雜隧道的艱鉅任務。南迴鐵路的動工不僅象徵著環島鐵路系統最後一塊拼圖的全面啟動，未來完工後更將徹底終結南臺灣與東臺灣長年受地理阻隔之苦，對縮短東西部空間距離、繁榮地方經濟具有跨世代的里程碑意義。", 
-      newspaperUrl: "https://www.ksnews.com.tw/" 
+      newspaperUrl: "https://www.ksnews.com.tw/",
+      imageCount: 2
     },
   ],
   "2-0": [
@@ -91,41 +96,71 @@ export const REPORTS_BY_SPEAKER: Record<string, Array<{
     { date: "2000-01-12", year: 2000, month: 1, day: 12, title: "釋迦產業大躍進：台東開創農業精緻化外銷傳奇", reporter: "特派記者 農家樂", summary: "在農業改良場與地方產銷班的攜手努力下，台東釋迦外銷冷鏈技術取得突破性進展。本報今日追蹤報導台東太麻里與卑南一帶的外銷裝箱盛況，象徵台東地方特色水果成功打入國際高端市場。", newspaperUrl: "https://www.ksnews.com.tw/" }
   ],
   "4-0": [
-    { date: "1990-08-03", year: 1990, month: 8, day: 3, title: "南王部落普悠瑪祭典：民俗信仰之神聖記載", reporter: "特派記者 卑南客", summary: "台東南王部落今日迎來盛大的除喪祭團祭儀。全體族人身著傳統盛裝共聚祭場，透過吟唱古調與神聖儀式向祖靈傳遞敬意。更生日報幾十年來對地方慶典的追蹤，捕捉到了人群中深沉的集體情緒。", newspaperUrl: "https://www.ksnews.com.tw/" },
-    { date: "2026-06-17", year: 2026, month: 6, day: 17, title: "《山海之間，地方日常》聯展開幕：共築台東故事長廊", reporter: "文史記者 展廳特報", summary: "由漢珍數位圖書公司與更生日報共同主辦的特展於台東故事館盛大開幕。展覽結合珍貴的報紙掃描原件與數位互動導航，透過一幀幀老照片與史料，喚醒東台灣八十載的日常記憶，展出首日即引發熱烈迴響。", newspaperUrl: "https://www.ksnews.com.tw/" }
+    { date: "1988-08-25", year: 1988, month: 8, day: 25, title: "台泥和平礦場破壞景觀民怨四起 昨召開協調會進行溝通圓滿達成", reporter: "更生日報記者群", summary: "台泥和平礦場長期開採作業，造成周邊景觀破壞，引發地方民怨四起。相關單位昨日召開協調會，邀集地方代表進行溝通，會議結果獲得圓滿共識。惟秀林鄉公所建設課長未出席會議，引起花蓮縣議員李繼生不滿，要求正視地方訴求。", newspaperUrl: "https://www.ksnews.com.tw/", imageCount: 1 }
   ]
 };
 
-export function buildReportImageCandidates(speakerName: string, reportDate: string) {
+/**
+ * 主要候選路徑。
+ * 1. 如果有提供 imageCount（已知這篇報導確切有幾張圖），直接組出對應數量的路徑
+ *    （第1張 A、第2張 B...），完全不用猜測，也不需要逐張檢查是否存在——
+ *    這是避免「網路忙線時被誤判漏圖」最根本的做法。
+ * 2. 沒有提供 imageCount 時（例如尚未確認張數的講者），回到舊的猜測模式：
+ *    只試最常見的命名慣例（日期 + 空格 + 字母 + .jpg），11 個候選（空白＋A~J）。
+ */
+export function buildReportImageCandidates(
+  speakerName: string,
+  reportDate: string,
+  imageCount?: number
+) {
   const folderName = (speakerName || "").split(/\s+/).filter(Boolean)[0] || "";
   const dateKey = reportDate.replace(/-/g, "");
   const folderSegment = folderName ? encodeURIComponent(folderName) : "";
-  const basePatterns = [
-    dateKey,
-    `${dateKey} A`, `${dateKey}A`,
-    `${dateKey} B`, `${dateKey}B`,
-    `${dateKey} C`, `${dateKey}C`,
-    `${dateKey} D`, `${dateKey}D`,
-    `${dateKey} E`, `${dateKey}E`,
-    `${dateKey} F`, `${dateKey}F`,
-    `${dateKey} G`, `${dateKey}G`,
-    `${dateKey} H`, `${dateKey}H`,
-    `${dateKey} I`, `${dateKey}I`,
-    `${dateKey} J`, `${dateKey}J`,
-  ];
-  const patterns = Array.from(new Set(basePatterns));
-  const extensions = ["jpg", "jpeg", "png", "webp"];
+
+  if (imageCount && imageCount > 0) {
+    return Array.from({ length: imageCount }, (_, i) => {
+      const letter = String.fromCharCode(65 + i); // 0→A, 1→B, 2→C...
+      return `/news/${folderSegment}/${encodeURIComponent(`${dateKey} ${letter}`)}.jpg`;
+    });
+  }
+
+  const letters = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+
+  return letters.map((letter) => {
+    const pattern = letter ? `${dateKey} ${letter}` : dateKey;
+    return `/news/${folderSegment}/${encodeURIComponent(pattern)}.jpg`;
+  });
+}
+
+/**
+ * 備援候選路徑：涵蓋其他副檔名（jpeg/png/webp）與「無空格」的舊寫法，
+ * 只有在主要候選一張都找不到時才會用到，避免日常情況下浪費大量無謂的請求。
+ */
+export function buildReportImageFallbackCandidates(speakerName: string, reportDate: string) {
+  const folderName = (speakerName || "").split(/\s+/).filter(Boolean)[0] || "";
+  const dateKey = reportDate.replace(/-/g, "");
+  const folderSegment = folderName ? encodeURIComponent(folderName) : "";
+  const letters = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+  const extensions = ["jpeg", "png", "webp"];
   const candidates: string[] = [];
 
-  patterns.forEach((pattern) => {
+  letters.forEach((letter) => {
+    const withSpace = letter ? `${dateKey} ${letter}` : dateKey;
     extensions.forEach((ext) => {
-      const encodedPattern = encodeURIComponent(pattern);
-      candidates.push(`/news/${folderSegment}/${encodedPattern}.${ext}`);
+      candidates.push(`/news/${folderSegment}/${encodeURIComponent(withSpace)}.${ext}`);
     });
+    if (letter) {
+      const noSpace = `${dateKey}${letter}`;
+      ["jpg", "jpeg", "png", "webp"].forEach((ext) => {
+        candidates.push(`/news/${folderSegment}/${encodeURIComponent(noSpace)}.${ext}`);
+      });
+    }
   });
 
-  return candidates;
+  return Array.from(new Set(candidates));
 }
+
+
 
 export function getReportImagePaths(speakerName: string, reportDate: string) {
   const candidates = buildReportImageCandidates(speakerName, reportDate);
@@ -136,14 +171,22 @@ export function getReportImagePaths(speakerName: string, reportDate: string) {
   };
 }
 
-export async function resolveReportImageCandidates(speakerName: string, reportDate: string) {
-  const candidates = buildReportImageCandidates(speakerName, reportDate);
+export async function resolveReportImageCandidates(
+  speakerName: string,
+  reportDate: string,
+  imageCount?: number
+) {
   const fallback = "/news/placeholder-newspaper.svg";
+
+  // 已知確切張數：直接信任資料、組路徑回傳，完全不發任何「是否存在」的探測請求。
+  // 這樣就不會再受網路延遲或瀏覽器併發連線限制影響，保證該幾張都會出現。
+  if (imageCount && imageCount > 0) {
+    return buildReportImageCandidates(speakerName, reportDate, imageCount);
+  }
+
   const perImageTimeoutMs = 5000;
 
-  // 同時檢查「所有」候選路徑是否存在，而不是排隊一個個依序檢查。
-  // 這樣整體搜尋時間大約只等於一次網路來回，不會因為候選路徑數量變多
-  // （例如某篇報導有 9 張圖、要試 80 多種檔名／副檔名組合）而被中途截斷。
+  // 同時檢查候選路徑是否存在，而不是排隊一個個依序檢查。
   const checkImage = (candidate: string) =>
     new Promise<{ candidate: string; exists: boolean }>((resolve) => {
       const image = new Image();
@@ -165,14 +208,26 @@ export async function resolveReportImageCandidates(speakerName: string, reportDa
       image.src = candidate;
     });
 
-  const results = await Promise.all(candidates.map(checkImage));
+  // 第一階段：只試最常見的命名慣例（11 個候選），同時連線數低，不易被誤判逾時。
+  const primaryCandidates = buildReportImageCandidates(speakerName, reportDate);
+  const primaryResults = await Promise.all(primaryCandidates.map(checkImage));
 
-  // Promise.all 回傳的陣列順序會跟輸入順序一致（即使各個請求完成的時間點不同），
-  // 所以這裡濾掉不存在的之後，仍會維持原本「日期 → A → B → C ...」的排序。
-  const resolvedCandidates = results
+  // Promise.all 回傳的陣列順序會跟輸入順序一致，所以濾掉不存在的之後，
+  // 仍會維持「日期 → A → B → C ...」的排序。
+  let resolvedCandidates = primaryResults
     .filter((result) => result.exists)
-    .map((result) => result.candidate)
-    .slice(0, 26);
+    .map((result) => result.candidate);
+
+  // 第二階段（備援）：只有第一階段完全找不到圖片時，才展開檢查其他副檔名／無空格寫法。
+  if (resolvedCandidates.length === 0) {
+    const fallbackCandidates = buildReportImageFallbackCandidates(speakerName, reportDate);
+    const fallbackResults = await Promise.all(fallbackCandidates.map(checkImage));
+    resolvedCandidates = fallbackResults
+      .filter((result) => result.exists)
+      .map((result) => result.candidate);
+  }
+
+  resolvedCandidates = resolvedCandidates.slice(0, 26);
 
   return resolvedCandidates.length > 0 ? resolvedCandidates : [fallback];
 }
@@ -183,7 +238,7 @@ export async function resolveReportImageCandidates(speakerName: string, reportDa
  */
 export function useReportImageResolver(
   speakerName: string,
-  currentReport: { date: string } | undefined
+  currentReport: { date: string; imageCount?: number } | undefined
 ) {
   const [resolvedPreviewImage, setResolvedPreviewImage] = useState("/news/placeholder-newspaper.svg");
   const [resolvedFullImage, setResolvedFullImage] = useState("/news/placeholder-newspaper.svg");
@@ -207,7 +262,7 @@ export function useReportImageResolver(
 
     const loadCandidates = async () => {
       try {
-        const candidates = await resolveReportImageCandidates(speakerName, currentReport.date);
+        const candidates = await resolveReportImageCandidates(speakerName, currentReport.date, currentReport.imageCount);
         if (!cancelled) {
           setResolvedImageCandidates(candidates);
           setResolvedPreviewImage(candidates[0] ?? "/news/placeholder-newspaper.svg");
@@ -239,7 +294,7 @@ export function useReportImageResolver(
 
 export interface OpenNewspaperPreviewArgs {
   speakerName: string;
-  currentReport: { date: string } | undefined;
+  currentReport: { date: string; imageCount?: number } | undefined;
   resolvedImageCandidates: string[];
   resolvedPreviewImage: string;
   setResolvedImageCandidates: (images: string[]) => void;
@@ -283,7 +338,7 @@ export async function openNewspaperPreview({
 
   const imageCandidates = resolvedImageCandidates.length > 0
     ? resolvedImageCandidates
-    : await resolveReportImageCandidates(speakerName, currentReport.date);
+    : await resolveReportImageCandidates(speakerName, currentReport.date, currentReport.imageCount);
 
   setResolvedImageCandidates(imageCandidates);
   setResolvedPreviewImage(imageCandidates[0] ?? "/news/placeholder-newspaper.svg");

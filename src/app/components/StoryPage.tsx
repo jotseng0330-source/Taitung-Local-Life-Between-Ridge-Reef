@@ -119,11 +119,28 @@ const MEDIA_BY_THEME: Record<number, { src: string; thumb: string; caption: stri
     }
   ],
   2: [
-    { src: "https://images.unsplash.com/photo-1601482919158-1af01b70a427?w=1200&h=800&fit=crop&auto=format", thumb: "https://images.unsplash.com/photo-1601482919158-1af01b70a427?w=200&h=140&fit=crop&auto=format", caption: "台東在地藝文展覽與文藝聚會現場，約 1970 年代。" },
-  ],
+    {
+      src: toStoryMediaPath("徐千惠", "台東兒童故事館.jpg"),
+      thumb: toStoryMediaPath("徐千惠", "台東兒童故事館.jpg"),
+      caption: "台東兒童故事館"
+    },
+    {
+      src: toStoryMediaPath("徐千惠", "臺東大學兒童文學研究所.jpg"),
+      thumb: toStoryMediaPath("徐千惠", "臺東大學兒童文學研究所.jpg"),
+      caption: "臺東大學兒童文學研究所"
+    }
+    ],
   3: [
-    { src: "https://images.unsplash.com/photo-1694005892433-7c810c1e54ae?w=1200&h=800&fit=crop&auto=format", thumb: "https://images.unsplash.com/photo-1694005892433-7c810c1e54ae?w=200&h=140&fit=crop&auto=format", caption: "台東農業水圳灌溉系統，產業發展景況，約 1955 年。" },
-  ],
+    {
+      src: toStoryMediaPath("許秀孟", "台東鹿野鄉茶園.jpg"),
+      thumb: toStoryMediaPath("許秀孟", "台東鹿野鄉茶園.jpg"),
+      caption: "台東鹿野鄉茶園"
+    },
+    {
+      src: toStoryMediaPath("許秀孟", "台東池上稻田一景.jpg"),
+      thumb: toStoryMediaPath("許秀孟", "台東池上稻田一景.jpg"),
+      caption: "台東池上稻田一景"
+    }  ],
   4: [
     {
       src: toStoryMediaPath("劉烱錫", "2015.4.1 利稻長老教會卡法司牧師帶領長榮大學布農族團契為高山湖泊取名Cinanuma buan (月亮的鏡子).jpg"),

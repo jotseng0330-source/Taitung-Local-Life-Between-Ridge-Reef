@@ -46,9 +46,9 @@ const SPEAKER_DATA: Record<SpeakerId, {
     bgImage: "https://images.unsplash.com/photo-1610859250485-31443500f8c6?w=1920&h=1080&fit=crop&auto=format"
   },
   "2-0": {
-    name: "徐千惠", honorific: "老師", institution: "國立台東高中退休教師", topic: "台東兒童文學發展", 
+    name: "徐千惠", honorific: "老師", institution: "國立台東高中退休教師", topic: "後山文學推廣", 
     portrait: "/portrait/徐千惠%20Profile.jpg",
-    tags: ["兒童文學", "童詩推廣", "副刊文藝"],
+    tags: ["後山文學獎", "文學營推廣", "副刊文藝"],
     essayTitle: "「後山文學獎」與「後山文學營」",
     essayParas: [
       "花東地區山海秀麗、人文薈萃、族群交融，遂孕育出文化的多樣面貌，例如祭典、歌曲、舞蹈、繪畫、雕刻、編織、陶藝與文學等。本篇文章將以「後山文學獎」與「後山文學營」為例，介紹這兩項深耕花東地區文學創作的重要活動。",

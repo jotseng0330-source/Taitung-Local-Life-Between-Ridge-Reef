@@ -23,7 +23,7 @@ const THEME_GROUPS = [
   {
     themeId: 2, index: "02", title: "地方藝文與文化人", tag: "文化藝術",
     speakers: [
-      { speakerId: "2-0" as SpeakerId, name: "徐千惠", honorific: "老師", institution: "國立台東高中退休教師", topic: "台東兒童文學發展", portrait: "/portrait/徐千惠%20Profile.jpg" }
+      { speakerId: "2-0" as SpeakerId, name: "徐千惠", honorific: "老師", institution: "國立台東高中退休教師", topic: "後山文學推廣", portrait: "/portrait/徐千惠%20Profile.jpg" }
     ],
   },
   {

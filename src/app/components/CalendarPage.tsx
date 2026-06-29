@@ -25,7 +25,7 @@ const SPEAKERS_BY_THEME: Record<number, Array<{ id: string; name: string; subTop
     { id: "1-1", name: "孟祥瀚 退休教授", subTopic: "交通發展" }
   ],
   2: [
-    { id: "2-0", name: "徐千惠 老師", subTopic: "台東兒童文學發展" }
+    { id: "2-0", name: "徐千惠 老師", subTopic: "後山文學推廣" }
   ],
   3: [
     { id: "3-0", name: "許秀孟 博士後研究員", subTopic: "傳統產業發展" }

@@ -17,25 +17,25 @@ const THEME_GROUPS = [
   {
     themeId: 1, index: "01", title: "山海之間的生活節奏", tag: "地方要聞",
     speakers: [
-      { speakerId: "1-1" as SpeakerId, name: "孟祥瀚", honorific: "退休教授", institution: "國立中興大學歷史學系", topic: "交通發展", portrait: "https://ws.th.gov.tw/002/TH/new_site/upload/show/2a757d4d76238f0d6b0006c42b2e116e.jpg" },
+      { speakerId: "1-1" as SpeakerId, name: "孟祥瀚", honorific: "退休教授", institution: "國立中興大學歷史學系", topic: "交通發展", portrait: "/portrait/孟祥瀚%20Profile.jpg" },
     ],
   },
   {
     themeId: 2, index: "02", title: "地方藝文與文化人", tag: "文化藝術",
     speakers: [
-      { speakerId: "2-0" as SpeakerId, name: "徐千惠", honorific: "老師", institution: "國立台東高中退休教師", topic: "台東兒童文學發展", portrait: "/portraits/徐千惠.jpg" }
+      { speakerId: "2-0" as SpeakerId, name: "徐千惠", honorific: "老師", institution: "國立台東高中退休教師", topic: "台東兒童文學發展", portrait: "/portrait/徐千惠%20Profile.jpg" }
     ],
   },
   {
     themeId: 3, index: "03", title: "地方特色產業發展", tag: "產業史",
     speakers: [
-      { speakerId: "3-0" as SpeakerId, name: "許秀孟", honorific: "博士後研究員", institution: "國立臺東大學人文創新與社會實踐中心", topic: "傳統產業發展", portrait: "https://nrchisp.nttu.edu.tw/var/file/63/1063/img/674163412.jpg" },
+      { speakerId: "3-0" as SpeakerId, name: "許秀孟", honorific: "博士後研究員", institution: "國立臺東大學人文創新與社會實踐中心", topic: "傳統產業發展", portrait: "/portrait/許秀孟%20Profile.jpg" },
     ],
   },
   {
     themeId: 4, index: "04", title: "祖先文化與土地", tag: "民俗信仰",
     speakers: [
-      { speakerId: "4-0" as SpeakerId, name: "劉烱錫", honorific: "主任", institution: "國立台東大學友善環境農漁產業發展中心", topic: "原住民族部落永續發展", portrait: "https://ils.nttu.edu.tw/var/file/20/1020/img/423586424.jpg" }, 
+      { speakerId: "4-0" as SpeakerId, name: "劉烱錫", honorific: "主任", institution: "國立台東大學友善環境農漁產業發展中心", topic: "原住民族部落永續發展", portrait: "/portrait/劉烱錫%20Profile.jpg" }, 
     ],
   },
 ];

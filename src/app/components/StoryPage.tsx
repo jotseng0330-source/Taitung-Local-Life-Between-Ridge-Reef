@@ -22,7 +22,7 @@ const SPEAKER_DATA: Record<SpeakerId, {
 }> = {
   "1-1": {
     name: "孟祥瀚", honorific: "退休教授", institution: "國立中興大學歷史學系", topic: "交通發展",
-    portrait: "https://ws.th.gov.tw/002/TH/new_site/upload/show/2a757d4d76238f0d6b0006c42b2e116e.jpg",
+    portrait: "/portrait/孟祥瀚%20Profile.jpg",
     tags: ["台東交通史", "鐵路發展", "更生日報地方要聞"],
     essayTitle: "百年來東線鐵路的發展",
     essayParas: [
@@ -47,7 +47,7 @@ const SPEAKER_DATA: Record<SpeakerId, {
   },
   "2-0": {
     name: "徐千惠", honorific: "老師", institution: "國立台東高中退休教師", topic: "台東兒童文學發展", 
-    portrait: "/portraits/徐千惠.jpg",
+    portrait: "/portrait/徐千惠%20Profile.jpg",
     tags: ["兒童文學", "童詩推廣", "副刊文藝"],
     essayTitle: "「後山文學獎」與「後山文學營」",
     essayParas: [
@@ -65,7 +65,7 @@ const SPEAKER_DATA: Record<SpeakerId, {
   },
   "3-0": {
     name: "許秀孟", honorific: "博士後研究員", institution: "國立臺東大學人文創新與社會實踐中心", topic: "傳統產業發展",
-    portrait: "https://nrchisp.nttu.edu.tw/var/file/63/1063/img/674163412.jpg",
+    portrait: "/portrait/許秀孟%20Profile.jpg",
     tags: ["台東產業史", "香茅與荖葉", "稻米與漁業"],
     essayTitle: "太平洋畔的芬芳：側看臺東物產六十年流變",
     essayParas: [
@@ -81,7 +81,7 @@ const SPEAKER_DATA: Record<SpeakerId, {
   },
   "4-0": {
     name: "劉烱錫", honorific: "主任", institution: "國立台東大學友善環境農漁產業發展中心", topic: "原住民族部落永續發展", 
-    portrait: "https://ils.nttu.edu.tw/var/file/20/1020/img/423586424.jpg",
+    portrait: "/portrait/劉烱錫%20Profile.jpg",
     tags: ["原住民文化", "傳統祭典", "民俗信仰"],
     essayTitle: "當世界快步向前走，為何開始回頭向部落學習慢生活？",
     essayParas: [

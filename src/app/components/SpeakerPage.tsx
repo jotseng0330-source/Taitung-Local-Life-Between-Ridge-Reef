@@ -23,7 +23,7 @@ const THEME_GROUPS = [
   {
     themeId: 2, index: "02", title: "地方藝文與文化人", tag: "文化藝術",
     speakers: [
-      { speakerId: "2-0" as SpeakerId, name: "徐千惠", honorific: "老師", institution: "國立台東高中退休教師", topic: "台東兒童文學發展", portrait: "https://scontent.ftpe8-4.fna.fbcdn.net/v/t39.30808-6/651170369_26603754445922869_2724252160407163222_n.jpg?stp=dst-jpg_tt6&cstp=mx1357x2048&ctp=s1357x2048&_nc_cat=104&ccb=1-7&_nc_sid=cf85f3&_nc_ohc=blYpYy5KFVUQ7kNvwHEZOFZ&_nc_oc=Adr4-5IirUd8wDZj5OhrZT_QbgNvkRW62Pd2VZTUWxHHIJ4Jwn-eiZMMNy5R5_Lokx2uMjQWEYnJahRmeqwS28qT&_nc_zt=23&_nc_ht=scontent.ftpe8-4.fna&_nc_gid=k_HTYuPNbJswa4hNn1IuyQ&_nc_ss=7b2a8&oh=00_Af8fk7bxT5XDChyu2fIubwezdtTZXdU7jmrVCOY-3gQryQ&oe=6A3630EC" }
+      { speakerId: "2-0" as SpeakerId, name: "徐千惠", honorific: "老師", institution: "國立台東高中退休教師", topic: "台東兒童文學發展", portrait: "/portraits/徐千惠.jpg" }
     ],
   },
   {

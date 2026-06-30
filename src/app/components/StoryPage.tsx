@@ -110,19 +110,19 @@ const toStoryMediaPath = (folderName: string, fileName: string) => `/story-media
 const MEDIA_BY_THEME: Record<number, { src: string; thumb: string; caption: string }[]> = {
   1: [
    {
-      src: toStoryMediaPath("孟祥瀚", "台東舊火車站（今台東轉運站）.jpg"),
-      thumb: toStoryMediaPath("孟祥瀚", "台東舊火車站（今台東轉運站）.jpg"),
-      caption: "台東舊火車站（今台東轉運站）"
+      src: toStoryMediaPath("孟祥瀚", "台鐵台東線起點：台東新站.jpg"),
+      thumb: toStoryMediaPath("孟祥瀚", "台鐵台東線起點：台東新站.jpg"),
+      caption: "台鐵台東線起點：台東新站"
     },
     {
-      src: toStoryMediaPath("孟祥瀚", "民國71年南下最後的光華號列車人員在玉里站合影留念.jpg"),
-      thumb: toStoryMediaPath("孟祥瀚", "民國71年南下最後的光華號列車人員在玉里站合影留念.jpg"),
-      caption: "民國71年南下最後的光華號列車人員在玉里站合影留念"
+      src: toStoryMediaPath("孟祥瀚", "南迴鐵路古莊隧道.jpg"),
+      thumb: toStoryMediaPath("孟祥瀚", "南迴鐵路古莊隧道.jpg"),
+      caption: "南迴鐵路古莊隧道"
     },
     {
-      src: toStoryMediaPath("孟祥瀚", "花東線火車路牌拋接.jpg"),
-      thumb: toStoryMediaPath("孟祥瀚", "花東線火車路牌拋接.jpg"),
-      caption: "花東線火車路牌拋接"
+      src: toStoryMediaPath("孟祥瀚", "舊時台鐵花東線車廂服務小姐.jpg"),
+      thumb: toStoryMediaPath("孟祥瀚", "舊時台鐵花東線車廂服務小姐.jpg"),
+      caption: "舊時台鐵花東線車廂服務小姐"
     }
   ],
   2: [

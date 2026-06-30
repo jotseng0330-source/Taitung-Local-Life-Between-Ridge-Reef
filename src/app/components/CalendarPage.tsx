@@ -15,7 +15,7 @@ const FONT_MONO = "'DM Mono','Courier New',monospace";
 
 const THEMES = [
   { id: 1, index: "01", title: "山海之間的生活節奏", tag: "地方要聞", src: "https://img.ltn.com.tw/Upload/news/600/2026/04/30/5421176_4_1.jpg" },
-  { id: 2, index: "02", title: "地方藝文與文化人", tag: "文化藝術", src: "https://images.unsplash.com/photo-1601482919158-1af01b70a427?w=600&h=360&fit=crop&auto=format" },
+  { id: 2, index: "02", title: "地方藝文與文化人", tag: "文化藝術", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Taitung_University_Library_and_Information_Center_0234.jpg/960px-Taitung_University_Library_and_Information_Center_0234.jpg" },
   { id: 3, index: "03", title: "地方特色產業發展", tag: "產業史", src: "https://icrvb3jy.xinmedia.com/solomo/article/7/0/4/7048FC0F-2676-4E05-BA98-78831E2E1F9B.jpg" },
   { id: 4, index: "04", title: "祖先文化與土地", tag: "民俗信仰", src: "https://upload.wikimedia.org/wikipedia/commons/9/90/台灣台東南王普悠瑪除喪祭團祭.jpg" },
 ];

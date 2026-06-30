@@ -32,7 +32,7 @@ const CARDS = [
   {
     id: 2, index: "02",
     title: "地方藝文與文化人",
-    src: "https://images.unsplash.com/photo-1601482919158-1af01b70a427?w=1000&h=680&fit=crop&auto=format",
+    src: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Taitung_University_Library_and_Information_Center_0234.jpg/960px-Taitung_University_Library_and_Information_Center_0234.jpg",
     alt: "台灣在地文化人物與藝術場景",
   },
   {
